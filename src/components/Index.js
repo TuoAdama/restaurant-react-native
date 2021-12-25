@@ -3,6 +3,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import PanierComponent from './PanierComponent'
 import CommandesComponent from './CommandesComponent'
 import HomeScreen from '../screens/HomeScreen'
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 const Index = () => {
@@ -21,7 +24,10 @@ const Index = () => {
                 component={HomeScreen}
                 options={{
                     headerShown:false,
-                    tabBarLabel:"Home"
+                    tabBarLabel:"Home",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="home" color={color} size={size} />
+                    ),            
                 }}/>
             
             <Tab.Screen
@@ -29,7 +35,10 @@ const Index = () => {
                 component={CommandesComponent}
                 options={{
                     headerShown:false,
-                    tabBarLabel:"Commandes"
+                    tabBarLabel:"Commandes",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="order-bool-descending" size={size} color={color} />
+                    ), 
                 }}/>
             
             <Tab.Screen
@@ -37,7 +46,10 @@ const Index = () => {
                 component={PanierComponent}
                 options={{
                     headerShown:false,
-                    tabBarLabel:"Panier"
+                    tabBarLabel:"Panier",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="fastfood" size={size} color={color} />
+                    ), 
                 }}/>
         </Tab.Navigator>
     )

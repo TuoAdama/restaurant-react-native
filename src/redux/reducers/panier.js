@@ -1,4 +1,4 @@
-import {ADD_TO_CART, DELETE_TO_CART} from '../actionTypes'
+import {ADD_TO_CART, DELETE_TO_CART, UPDATE_QUANTITY} from '../actionTypes'
 
 const initialState =  {
     panier: []
@@ -16,6 +16,17 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 panier: state.panier.filter(item => item.id != action.payload.id)
+            }
+        case UPDATE_QUANTITY:
+            let index = state.panier.findIndex(el => el.id == action.payload.id)
+            if(index != -1){
+                cartItem = state.panier[index]
+                return {
+                    ...state,
+                    panier:[
+                        ...state.panier,
+                    ]
+                }
             }
         default:
             return state
