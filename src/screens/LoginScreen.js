@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation }) {
     
     
     if (onValid()) {
-      navigation.replace("Home");
+      navigation.replace("Index");
     }
   };
 
