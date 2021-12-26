@@ -1,17 +1,18 @@
 import React from "react";
 import { StyleSheet, View, FlatList, Button } from "react-native";
 import CartItem from "./CartItem";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
 const PanierComponent = (props) => {
-    return (
+  return (
     <View style={styles.container}>
-      {/* <Button title='Test' onPress={() => {
-        console.log(props.panier)
-      }}/> */}
       <FlatList
         data={props.panier}
-        renderItem={CartItem}
+        renderItem={({item}) => (
+          <View>
+            <CartItem item={item} />
+          </View>
+        )}
         keyExtractor={(item) => item.id}
         horizontal={false}
       />
@@ -24,7 +25,9 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     flex: 1,
   },
-  renderItem: {height: 150,height: 150,
+  renderItem: {
+    height: 150,
+    height: 150,
     width: 150,
     width: 150,
     borderStyle: "solid",
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-    panier: state.panier
+  panier: state.panier,
 });
 
 export default connect(mapStateToProps)(PanierComponent);
