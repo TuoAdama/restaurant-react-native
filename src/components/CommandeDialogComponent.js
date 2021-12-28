@@ -2,21 +2,28 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import Dialog from "react-native-dialog";
-import {addToCart} from '../redux/actions';
-import {connect} from 'react-redux'
-
+import { addToCart, updateQuantite } from "../redux/actions";
+import { connect } from "react-redux";
 
 const CommandeDialogComponent = (props) => {
-    
- const [qte, setQte] = useState(1);
+  const [qte, setQte] = useState(1);
 
- const onAdd = (qte) => {
-    console.log(props.addToCart({
-        ...props.item,
-        quantite:qte
-    }));
-    props.setShow(false)
- }
+  const onAdd = (qte) => {
+    props.setShow(false);
+    props.addToCart({
+      ...props.item,
+      quantite: qte,
+    })
+  };
+
+  const inCart = (id) => {
+    return props.panier.findIndex((item) => item.id == id) != -1;
+  };
+
+  const update = () => {
+    props.setShow(false);
+    props.updateQuantite(props.item, qte);
+  };
 
   return (
     <Dialog.Container visible={props.show}>
@@ -26,8 +33,7 @@ const CommandeDialogComponent = (props) => {
             <Pressable
               onPress={() => {
                 if (qte > 1) {
-                    
-                    setQte(qte-1)
+                  setQte(qte - 1);
                 }
               }}
             >
@@ -38,15 +44,22 @@ const CommandeDialogComponent = (props) => {
               />
             </Pressable>
             <Text style={styles.qte}>{qte}</Text>
-            <Pressable onPress={() => setQte(qte+1)}>
+            <Pressable onPress={() => setQte(qte + 1)}>
               <Ionicons name="ios-add-circle-outline" size={40} color="black" />
             </Pressable>
           </View>
         </View>
         <View styles={styles.btn}>
-          <Button title="valider" onPress={() =>onAdd(qte)} />
-          <View style={{marginBottom:12}}></View>
-          <Button title="Annuler" onPress={() => props.setShow(false)} color="#e63946"/>
+          <Button
+            title={inCart(props.item.id) ? "Modifier" : "Valider"}
+            onPress={inCart(props.item.id) ? update : () => onAdd(qte)}
+          />
+          <View style={{ marginBottom: 12 }}></View>
+          <Button
+            title="Annuler"
+            onPress={() => props.setShow(false)}
+            color="#e63946"
+          />
         </View>
       </View>
     </Dialog.Container>
@@ -60,18 +73,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
   },
-  qte:{
-      fontSize:20,
+  qte: {
+    fontSize: 20,
   },
-  btn:{
-      padding:3,
-  }
+  btn: {
+    padding: 3,
+  },
 });
 
-
 const mapStateToProps = (state) => ({
-    panier:state.panier
-})
+  panier: state.panier,
+});
 
-
-export default connect(mapStateToProps, {addToCart})(CommandeDialogComponent);
+export default connect(mapStateToProps, { addToCart, updateQuantite })(
+  CommandeDialogComponent
+);

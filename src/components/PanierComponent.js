@@ -23,32 +23,42 @@ const PanierComponent = (props) => {
     props.updateQuantite(item, qte);
   };
 
-  const printTotal = () => {
-    let total = 0
-    props.panier.forEach( item => {
-      total += item.prix * item.quantite
-    });
-    return total
-  }
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={props.panier}
-        renderItem={({ item }) => (
-          <CartItem
-            item={item}
-            onRemove={() => onRemove(item.id)}
-            incrementQuantite={() => incrementQuantite(item.id)}
-            decrementQuantite={() => decrementQuantite(item.id)}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        horizontal={false}
-      />
-      <View>
-        <Text>Total :  {printTotal()} FCFA</Text>
+  const showPanier = () => {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={props.panier}
+          renderItem={({ item }) => (
+            <CartItem
+              item={item}
+              onRemove={() => onRemove(item.id)}
+              incrementQuantite={() => incrementQuantite(item.id)}
+              decrementQuantite={() => decrementQuantite(item.id)}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          horizontal={false}
+        />
+        <View>
+          <Text>Total : {printTotal()} FCFA</Text>
+        </View>
       </View>
+    );
+  };
+
+  const printTotal = () => {
+    let total = 0;
+    props.panier.forEach((item) => {
+      total += item.prix * item.quantite;
+    });
+    return total;
+  };
+
+  return props.panier.length > 0 ? (
+    showPanier()
+  ) : (
+    <View style={[styles.container, {justifyContent:'center', alignItems:'center'}]}>
+      <Text>Panier vide</Text>
     </View>
   );
 };
@@ -66,9 +76,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#000",
   },
-  total:{
-    textAlign:'center'
-  }
+  total: {
+    textAlign: "center",
+  },
 });
 
 const mapStateToProps = (state) => ({
