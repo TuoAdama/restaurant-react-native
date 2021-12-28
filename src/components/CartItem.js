@@ -12,7 +12,10 @@ const CartItem = (props) => {
           resizeMode="contain"
           style={styles.image}
         />
-        <Text>{props.item.libelle}</Text>
+        <View>
+          <Text style={styles.title}>{props.item.libelle}</Text>
+          <Text>{props.item.prix} FCFA</Text>
+        </View>
       </View>
       <View style={[styles.quantite]}>
         <TouchableHighlight onPress={props.decrementQuantite}>
@@ -61,6 +64,10 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
   },
+  title:{
+    fontSize:18,
+    fontWeight:'bold'
+  }
 });
 
 export default CartItem;
