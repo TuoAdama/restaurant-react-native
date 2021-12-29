@@ -11,7 +11,7 @@ export default class SearchComponent extends Component {
     return (
       <View style={styles.container}>
         <EvilIcons style={styles.icon} name="search" size={30} color="black" />
-        <TextInput style={styles.input} onChangeText={this.props.onChange} placeholder='recherche'/>
+        <TextInput style={styles.input} onChangeText={this.props.onChangeText} placeholder='recherche'/>
       </View>
     );
   }

@@ -24,7 +24,8 @@ class HomeScreen extends Component {
   }
 
   onSearch(search) {
-    let results = plats;
+    let results = this.getPlatByCurrentCategorie(this.state.categorieSelected);
+
     if (search.trim().length) {
       results = this.state.plats.filter((item) =>
         item.libelle.toLowerCase().startsWith(search.trim().toLowerCase())
@@ -65,19 +66,23 @@ class HomeScreen extends Component {
     });
   }
 
-  onSelectCategorie(item) {
+  onSelectCategorie(currentCategorie) {
+    let result = this.getPlatByCurrentCategorie(currentCategorie);
+    this.setState({
+      categorieSelected: currentCategorie,
+      plats: result,
+    });
+  }
+
+  getPlatByCurrentCategorie(currentCategorie) {
     let results = plats;
 
-    if (item.id != 0) {
+    if (currentCategorie.id != 0) {
       results = plats.filter(
-        (plat) => plat.categorie.libelle == item.libelle
+        (plat) => plat.categorie.libelle == currentCategorie.libelle
       );
     }
-
-    this.setState({
-      categorieSelected:item,
-      plats:results
-    })
+    return results;
   }
 
   render() {
