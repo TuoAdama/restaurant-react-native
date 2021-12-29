@@ -6,19 +6,63 @@ import SearchComponent from "../components/SearchComponent";
 import { plats } from "../data/data";
 import { FlatGrid } from "react-native-super-grid";
 import { connect } from "react-redux";
+import { addToCart, updateQuantite } from "../redux/actions";
+import CommandeDialogComponent from "../components/CommandeDialogComponent";
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      visible: false,
+      itemSelected: null,
+    };
+
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSearch(value) {}
 
-  onShowDialog(item) {}
+  addItem(item) {
+    this.setState({
+      itemSelected: item,
+      visible: true,
+    });
+  }
+
+  onSubmit(qte) {
+
+    const selectItem = this.state.itemSelected
+
+    let index = this.props.panier.findIndex(
+      (item) => item.id == selectItem.id
+    );
+    if (index == -1) {
+      this.props.addToCart({
+        ...selectItem,
+        quantite: qte,
+      });
+    } else {
+      this.props.updateQuantite(selectItem, qte);
+    }
+    this.onClose();
+  }
+
+  onClose() {
+    this.setState({
+      visible: false,
+      itemSelected: null,
+    });
+  }
 
   render() {
     return (
       <View style={styles.container}>
+        <CommandeDialogComponent
+          visible={this.state.visible}
+          item={this.state.itemSelected}
+          onSubmit={this.onSubmit}
+          onClose={this.onClose.bind(this)}
+        />
         <View>
           <SearchComponent onChangeText={this.onSearch.bind(this)} />
           <Text style={styles.section}>Categories</Text>
@@ -38,9 +82,7 @@ class HomeScreen extends Component {
           data={plats}
           spacing={15}
           renderItem={({ item }) => (
-            <View>
-              <PlatItem item={item} onShowDialog={() => this.onShowDialog(item)} />
-            </View>
+            <PlatItem item={item} onAdd={() => this.addItem(item)} />
           )}
         />
       </View>
@@ -73,4 +115,4 @@ const mapStateToProps = (state) => ({
   panier: state.panier,
 });
 
-export default connect(mapStateToProps)(HomeScreen);
+export default connect(mapStateToProps, { addToCart, updateQuantite })(HomeScreen);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Pressable,
   StyleSheet,
@@ -9,49 +9,28 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import CommandeDialogComponent from "./CommandeDialogComponent";
-
 
 const PlatItem = (props) => {
-  const [visible, setVisible] = useState(false);
-
-  const show = () => {
-    console.log('showing...')
-    setVisible(true);
-  };
-
-  const onTap = () => {
-    console.log("On tap");
-  };
-
   return (
     <View>
-      <Pressable style={styles.container} onPress={onTap}>
-        <View style={styles.cart}>
+      <Pressable style={styles.container}>
+        <View>
           <Image
             style={styles.image}
             resizeMode="contain"
             source={require("../assets/images/coca.jpg")}
           />
           <View style={styles.description}>
-            <View style={styles.description_left}>
+            <View>
               <Text>{props.item.libelle}</Text>
               <Text>{props.item.prix} FCFA</Text>
             </View>
-            <TouchableHighlight
-              style={styles.description_right}
-              onPress={show}
-            >
+            <TouchableHighlight onPress={props.onAdd}>
               <Ionicons name="ios-add-circle-outline" size={30} color="black" />
             </TouchableHighlight>
           </View>
         </View>
       </Pressable>
-      <CommandeDialogComponent
-        show={visible}
-        setShow={setVisible}
-        item={props.item}
-      />
     </View>
   );
 };

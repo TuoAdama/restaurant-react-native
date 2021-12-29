@@ -1,32 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import Dialog from "react-native-dialog";
-import { addToCart, updateQuantite } from "../redux/actions";
-import { connect } from "react-redux";
 
 const CommandeDialogComponent = (props) => {
   const [qte, setQte] = useState(1);
 
-  const onAdd = (qte) => {
-    props.setShow(false);
-    props.addToCart({
-      ...props.item,
-      quantite: qte,
-    })
-  };
-
-  const inCart = (id) => {
-    return props.panier.findIndex((item) => item.id == id) != -1;
-  };
-
-  const update = () => {
-    props.setShow(false);
-    props.updateQuantite(props.item, qte);
-  };
-
   return (
-    <Dialog.Container visible={props.show}>
+    <Dialog.Container visible={props.visible}>
       <View>
         <View>
           <View style={styles.container}>
@@ -51,15 +32,13 @@ const CommandeDialogComponent = (props) => {
         </View>
         <View styles={styles.btn}>
           <Button
-            title={inCart(props.item.id) ? "Modifier" : "Valider"}
-            onPress={inCart(props.item.id) ? update : () => onAdd(qte)}
+            title="Valider"
+            onPress={() => {
+              props.onSubmit(qte);
+            }}
           />
           <View style={{ marginBottom: 12 }}></View>
-          <Button
-            title="Annuler"
-            onPress={() => props.setShow(false)}
-            color="#e63946"
-          />
+          <Button title="Annuler" onPress={props.onClose} color="#e63946" />
         </View>
       </View>
     </Dialog.Container>
@@ -81,10 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  panier: state.panier,
-});
-
-export default connect(mapStateToProps, { addToCart, updateQuantite })(
-  CommandeDialogComponent
-);
+export default CommandeDialogComponent;
