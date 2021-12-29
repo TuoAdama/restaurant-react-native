@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen'
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native'
 
 
 const Index = () => {

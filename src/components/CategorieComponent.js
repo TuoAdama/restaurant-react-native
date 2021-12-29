@@ -7,16 +7,10 @@ import {
   TouchableHighlight,
 } from "react-native";
 
-const CategorieComponent = () => {
+const CategorieComponent = (props) => {
   return (
     <TouchableHighlight style={styles.container} onPress={(e) => console.log("Hello, world")}>
-      <View style={styles.subContainer}>
-        <Image
-          style={styles.image}
-          source={require("../assets/images/fruit.jpg")}
-        />
-        <Text style={styles.text}>Fruit</Text>
-      </View>
+      <Text style={styles.text}>{props.item.libelle}</Text>
     </TouchableHighlight>
   );
 };
@@ -25,36 +19,18 @@ export default CategorieComponent;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
-    marginTop: 15,
+    marginBottom:10,
     marginHorizontal:4,
-    width: 130,
+    width: 120,
     borderRadius: 20,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    shadowColor: "#000",
-    backgroundColor: "#ffe",
-    paddingBottom: 10,
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.41,
-
-    elevation: 2,
-  },
-  subContainer:{
-    alignItems:'center'
-  },
-  image: {
-    resizeMode: "contain",
-    width: 110,
-    height: 80,
+    justifyContent: "center",
+    alignItems:'center',
+    backgroundColor: "#ffffff",
+    borderWidth:1,
+    borderColor:'#dbdbdb'
   },
   text: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight:'500'
   },
 });

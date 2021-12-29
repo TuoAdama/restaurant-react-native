@@ -3,11 +3,12 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import CategorieComponent from "../components/CategorieComponent";
 import PlatItem from "../components/PlatItem";
 import SearchComponent from "../components/SearchComponent";
-import { plats } from "../data/data";
+import { plats, categories } from "../data/data";
 import { FlatGrid } from "react-native-super-grid";
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import CommandeDialogComponent from "../components/CommandeDialogComponent";
+import { FlatList } from "react-native-gesture-handler";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -15,12 +16,24 @@ class HomeScreen extends Component {
     this.state = {
       visible: false,
       itemSelected: null,
+      plats: plats,
     };
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSearch(value) {}
+  onSearch(search) {
+    let results = plats;
+    if (search.trim().length) {
+      results = this.state.plats.filter((item) =>
+        item.libelle.toLowerCase().startsWith(search.trim().toLowerCase())
+      );
+    }
+
+    this.setState({
+      plats:results
+    })
+  }
 
   addItem(item) {
     this.setState({
@@ -30,12 +43,9 @@ class HomeScreen extends Component {
   }
 
   onSubmit(qte) {
+    const selectItem = this.state.itemSelected;
 
-    const selectItem = this.state.itemSelected
-
-    let index = this.props.panier.findIndex(
-      (item) => item.id == selectItem.id
-    );
+    let index = this.props.panier.findIndex((item) => item.id == selectItem.id);
     if (index == -1) {
       this.props.addToCart({
         ...selectItem,
@@ -65,21 +75,18 @@ class HomeScreen extends Component {
         />
         <View>
           <SearchComponent onChangeText={this.onSearch.bind(this)} />
-          <Text style={styles.section}>Categories</Text>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
+          <FlatList
             horizontal={true}
-            contentContainerStyle={{ height: 130 }}
-          >
-            <CategorieComponent />
-            <CategorieComponent />
-          </ScrollView>
+            showsHorizontalScrollIndicator={false}
+            data={categories}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <CategorieComponent item={item} />}
+          />
         </View>
-        <Text style={[styles.section, { marginTop: 25 }]}>Plats</Text>
         <FlatGrid
           itemDimension={150}
           showsVerticalScrollIndicator={false}
-          data={plats}
+          data={this.state.plats}
           spacing={15}
           renderItem={({ item }) => (
             <PlatItem item={item} onAdd={() => this.addItem(item)} />
@@ -94,16 +101,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
-    marginHorizontal: 18,
+    marginHorizontal: 13,
   },
   section: {
     fontSize: 30,
     fontWeight: "bold",
-  },
-  subsection: {
-    marginTop: 20,
-    flex: 1,
-    alignItems: "center",
   },
   plats: {
     flexDirection: "row",
@@ -115,4 +117,6 @@ const mapStateToProps = (state) => ({
   panier: state.panier,
 });
 
-export default connect(mapStateToProps, { addToCart, updateQuantite })(HomeScreen);
+export default connect(mapStateToProps, { addToCart, updateQuantite })(
+  HomeScreen
+);

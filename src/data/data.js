@@ -1,42 +1,73 @@
 export const plats = [
   {
     id: 1,
-    libelle: "Plat 1",
-    prix:500
+    libelle: "Orange",
+    prix: 500,
+    categorie:{
+      libelle:'fruit'
+    }
   },
   {
     id: 2,
-    libelle: "Plat 2",
-    prix:400
+    libelle: "Panini",
+    prix: 400,
+    categorie:{
+      libelle:'sandwich'
+    }
   },
   {
     id: 3,
-    libelle: "Plat 3",
-    prix:200
+    libelle: "Coca-cola",
+    prix: 200,
+    categorie:{
+      libelle:'boisson'
+    }
   },
   {
     id: 4,
-    libelle: "Plat 4",
-    prix:100
+    libelle: "Papaye",
+    prix: 100,
+    categorie:{
+      libelle:'fruit'
+    }
   },
   {
     id: 5,
-    libelle: "Plat 5",
-    prix:500
+    libelle: "Malta",
+    prix: 500,
+    categorie:{
+      libelle:'boisson'
+    }
   },
   {
     id: 6,
-    libelle: "Plat 6",
-    prix:900
+    libelle: "Madarine",
+    prix: 900,
+    categorie:{
+      libelle:'fruit'
+    }
   },
   {
     id: 7,
-    libelle: "Plat 7",
-    prix:300
+    libelle: "Hunbeguer",
+    prix: 300,
+    categorie:{
+      libelle:'sandwich'
+    }
   },
   {
     id: 8,
-    libelle: "Plat 8",
-    prix:100
+    libelle: "Eau",
+    prix: 100,
+    categorie:{
+      libelle:'boisson'
+    }
   },
+];
+
+export const categories = [
+  { id: 0, libelle: "tout" },
+  { id: 1, libelle: "fruit" },
+  { id: 2, libelle: "boisson" },
+  { id: 3, libelle: "sandwich" },
 ];
