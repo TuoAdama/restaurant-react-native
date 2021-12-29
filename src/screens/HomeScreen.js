@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { LogBox, ScrollView, StyleSheet, Text, View } from "react-native";
 import CategorieComponent from "../components/CategorieComponent";
 import PlatItem from "../components/PlatItem";
 import SearchComponent from "../components/SearchComponent";
@@ -17,6 +17,7 @@ class HomeScreen extends Component {
       visible: false,
       itemSelected: null,
       plats: plats,
+      categorieSelected: categories[0],
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -31,8 +32,8 @@ class HomeScreen extends Component {
     }
 
     this.setState({
-      plats:results
-    })
+      plats: results,
+    });
   }
 
   addItem(item) {
@@ -64,6 +65,21 @@ class HomeScreen extends Component {
     });
   }
 
+  onSelectCategorie(item) {
+    let results = plats;
+
+    if (item.id != 0) {
+      results = plats.filter(
+        (plat) => plat.categorie.libelle == item.libelle
+      );
+    }
+
+    this.setState({
+      categorieSelected:item,
+      plats:results
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -80,7 +96,13 @@ class HomeScreen extends Component {
             showsHorizontalScrollIndicator={false}
             data={categories}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <CategorieComponent item={item} />}
+            renderItem={({ item }) => (
+              <CategorieComponent
+                item={item}
+                selected={this.state.categorieSelected.id == item.id}
+                onSelect={() => this.onSelectCategorie(item)}
+              />
+            )}
           />
         </View>
         <FlatGrid

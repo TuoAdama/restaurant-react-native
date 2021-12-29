@@ -9,7 +9,10 @@ import {
 
 const CategorieComponent = (props) => {
   return (
-    <TouchableHighlight style={styles.container} onPress={(e) => console.log("Hello, world")}>
+    <TouchableHighlight
+      style={[styles.container, props.selected ? styles.selected : {}]}
+      onPress={props.onSelect}
+    >
       <Text style={styles.text}>{props.item.libelle}</Text>
     </TouchableHighlight>
   );
@@ -19,18 +22,21 @@ export default CategorieComponent;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom:10,
-    marginHorizontal:4,
+    marginBottom: 10,
+    marginHorizontal: 4,
     width: 120,
     borderRadius: 20,
     justifyContent: "center",
-    alignItems:'center',
+    alignItems: "center",
     backgroundColor: "#ffffff",
-    borderWidth:1,
-    borderColor:'#dbdbdb'
+    borderWidth: 1,
+    borderColor: "#dbdbdb",
   },
   text: {
     fontSize: 20,
-    fontWeight:'500'
+    fontWeight: "500",
+  },
+  selected: {
+    backgroundColor: "#f07167",
   },
 });
