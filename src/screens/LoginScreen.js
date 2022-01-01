@@ -8,27 +8,38 @@ import {
   StatusBar,
 } from "react-native";
 
+import { firebase } from "../../firebase/config";
+
 export default function LoginScreen({ navigation }) {
-  const [username, onChangeUsername] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
-  const [isValid, onChangeIsValid] = React.useState();
+  const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
+  const [password, onChangePassword] = React.useState("tuoadama123456");
 
-  const credential = {
-    username: "Admin",
-    password: "Admin",
-  };
-
-  function onValid() {
-    return credential.username == username && credential.password == password;
-  }
 
   const onSubmitHandler = () => {
-    onChangeIsValid(onValid());
-    
-    
-    if (onValid()) {
-      navigation.replace("Index");
-    }
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(username, password)
+      .then((credential) => {
+        const personnelDoc = firebase
+          .firestore()
+          .collection("personnels")
+          .doc(credential.user.uid)
+          .get()
+          .then((firestoreDoc) => {
+            if (!firestoreDoc.exists) {
+              alert("Personnel n'existe pas");
+              return;
+            }
+            navigation.replace("Index", { personnel: firestoreDoc.data() });
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  const onRegisterHandler = () => {
+    navigation.navigate("RegisterScreen");
   };
 
   return (
@@ -38,9 +49,6 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.title}>compte</Text>
       </View>
       <View style={styles.form}>
-        { (isValid != undefined && isValid == false) && (
-          <Text style={styles.error}>Identenfiant incorrect</Text>
-        )}
         <TextInput
           style={styles.input}
           placeholder="nom d'utilisateur"
@@ -56,6 +64,12 @@ export default function LoginScreen({ navigation }) {
         />
         <TouchableHighlight style={styles.btn} onPress={onSubmitHandler}>
           <Text style={styles.btnText}>Se connecter</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={[styles.btn, { backgroundColor: "red" }]}
+          onPress={onRegisterHandler}
+        >
+          <Text style={styles.btnText}>S'enregistrer</Text>
         </TouchableHighlight>
       </View>
     </View>

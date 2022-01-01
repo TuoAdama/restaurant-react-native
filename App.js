@@ -5,6 +5,7 @@ import Index from './src/components/Index'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import store from './src/redux/store'
 import {Provider} from 'react-redux'
+import RegisterScreen from './src/screens/RegisterScreen';
 
 export default function App() {
 
@@ -15,6 +16,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="LoginScreen">
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:false}}/>
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{headerShown:false}}/>
           <Stack.Screen name="Index" component={Index} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
