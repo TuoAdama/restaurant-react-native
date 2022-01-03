@@ -14,13 +14,12 @@ export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
   const [password, onChangePassword] = React.useState("tuoadama123456");
 
-
   const onSubmitHandler = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(username, password)
       .then((credential) => {
-        const personnelDoc = firebase
+        firebase
           .firestore()
           .collection("personnels")
           .doc(credential.user.uid)

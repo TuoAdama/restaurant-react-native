@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { LogBox, ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CategorieComponent from "../components/CategorieComponent";
 import PlatItem from "../components/PlatItem";
 import SearchComponent from "../components/SearchComponent";
-import { plats, categories } from "../data/data";
 import { FlatGrid } from "react-native-super-grid";
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import CommandeDialogComponent from "../components/CommandeDialogComponent";
 import { FlatList } from "react-native-gesture-handler";
+import { getCategories, getPlats } from "../../firebase/data";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -16,11 +16,25 @@ class HomeScreen extends Component {
     this.state = {
       visible: false,
       itemSelected: null,
-      plats: plats,
-      categorieSelected: categories[0],
+      plats: [],
+      categories:[],
+      categorieSelected: null,
     };
 
+    this.allPlats = []
+
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillMount() {
+    Promise.all([getPlats(), getCategories()]).then(([platsRes, categoriesRes]) => {
+      this.allPlats = platsRes;
+      this.setState({
+        plats: platsRes,
+        categories:categoriesRes,
+        categorieSelected: categoriesRes.find(item => item.id == 0)
+      })
+    });
   }
 
   onSearch(search) {
@@ -75,11 +89,11 @@ class HomeScreen extends Component {
   }
 
   getPlatByCurrentCategorie(currentCategorie) {
-    let results = plats;
+    let results = this.allPlats;
 
     if (currentCategorie.id != 0) {
-      results = plats.filter(
-        (plat) => plat.categorie.libelle == currentCategorie.libelle
+      results = this.allPlats.filter(
+        (plat) => plat.categorie == currentCategorie.libelle
       );
     }
     return results;
@@ -99,7 +113,7 @@ class HomeScreen extends Component {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={categories}
+            data={this.state.categories}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <CategorieComponent
