@@ -46,7 +46,6 @@ const Index = () => {
                 name="Panier"
                 component={PanierComponent}
                 options={{
-                    headerShown:false,
                     tabBarLabel:"Panier",
                     tabBarIcon: ({ color, size }) => (
                         <MaterialIcons name="fastfood" size={size} color={color} />

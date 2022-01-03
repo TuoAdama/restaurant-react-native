@@ -2,19 +2,21 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import 'intl';
+import "intl/locale-data/jsonp/fr";
 
 const CartItem = (props) => {
   return (
     <View style={[styles.container, styles.border]}>
       <View style={styles.cartImage}>
         <Image
-          source={require("../assets/images/coca.jpg")}
+          source={{uri:props.item.images[0]}}
           resizeMode="contain"
           style={styles.image}
         />
         <View>
           <Text style={styles.title}>{props.item.libelle}</Text>
-          <Text>{props.item.prix} FCFA</Text>
+          <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
         </View>
       </View>
       <View style={[styles.quantite]}>

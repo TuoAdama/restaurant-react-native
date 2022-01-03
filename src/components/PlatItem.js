@@ -8,6 +8,9 @@ import {
   TouchableHighlight,
 } from "react-native";
 
+import 'intl';
+import "intl/locale-data/jsonp/fr";
+
 import { Ionicons } from "@expo/vector-icons";
 
 const PlatItem = (props) => {
@@ -18,12 +21,12 @@ const PlatItem = (props) => {
           <Image
             style={styles.image}
             resizeMode="contain"
-            source={require("../assets/images/coca.jpg")}
+            source={{uri:props.item.images[0]}}
           />
           <View style={styles.description}>
             <View>
               <Text>{props.item.libelle}</Text>
-              <Text>{props.item.prix} FCFA</Text>
+              <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
             </View>
             <TouchableHighlight onPress={props.onAdd}>
               <Ionicons name="ios-add-circle-outline" size={30} color="black" />
