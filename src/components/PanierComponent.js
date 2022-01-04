@@ -6,18 +6,25 @@ import {
   Text,
   TouchableOpacity,
   Button,
+  Picker,
 } from "react-native";
 import CartItem from "./CartItem";
 import { connect } from "react-redux";
-import { removeCartItem, updateQuantite } from "../redux/actions";
+import {
+  removeCartItem,
+  updateQuantite,
+  clearCart,
+  addToCommande,
+} from "../redux/actions";
 import "intl";
 import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
-import { TextInput } from "react-native-gesture-handler";
+import { storeCommande } from "../../firebase/data";
 
 const PanierComponent = (props) => {
   const [visible, setVisible] = React.useState(false);
-  var numTable = '';
+  const tables = ["TAB001", "TAB002", "TAB003", "TAB004"];
+  const [tableSelected, settableSelected] = React.useState(tables[0]);
 
   const onRemove = (i) => {
     props.removeCartItem(i);
@@ -41,17 +48,49 @@ const PanierComponent = (props) => {
     setVisible(true);
   };
 
+  const handlerValid = () => {
+    setVisible(false);
+
+    const date = new Date();
+    const currentDate = date.toLocaleDateString().replaceAll("/", "-");
+    const currentTime = date.toLocaleTimeString();
+
+    const now = currentDate + " " + currentTime;
+
+    const commande = {
+      table: tableSelected,
+      date: now,
+      status:'EN COURS',
+      commandes: props.panier,
+    };
+    storeCommande(commande).then((result) => console.log(result));
+    props.addToCommande(commande);
+    props.clearCart();
+  };
+
   const showPanier = () => {
     return (
       <View style={styles.container}>
         <Dialog.Container visible={visible}>
           <Text style={styles.confirmTitle}>Numero de table:</Text>
-          <TextInput
-            style={styles.confirmInput}
-            autoCapitalize={'characters'}
-            onChangeText={(value) => (numTable = value)}
+          <Picker
+            style={styles.confirmPicker}
+            selectedValue={tableSelected}
+            onValueChange={(itemValue, itemIndex) =>
+              settableSelected(itemValue)
+            }
+          >
+            {tables.map((tab, id) => (
+              <Picker.Item key={id} label={tab} value={tab} />
+            ))}
+          </Picker>
+          <Button title="valider" onPress={handlerValid} />
+          <View style={{ marginBottom: 12 }}></View>
+          <Button
+            title="annuler"
+            color="#e63946"
+            onPress={() => setVisible(false)}
           />
-          <Button title="valider" onPress={() => setVisible(false)} />
         </Dialog.Container>
         <FlatList
           data={props.panier}
@@ -149,25 +188,25 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
   },
-  confirmInput: {
-    padding: 10,
-    borderRadius: 15,
-    marginVertical: 15,
-    backgroundColor: "#EBEBEB",
-    textAlign: "center",
-    fontSize: 20,
+  confirmPicker: {
+    marginVertical: 10,
+    height: 50,
+    borderWidth: 1,
+  },
+  confirmTitle: {
+    fontSize: 18,
     fontWeight: "400",
   },
-  confirmTitle:{
-    fontSize:18,
-    fontWeight:'400'
-  }
 });
 
 const mapStateToProps = (state) => ({
   panier: state.panier,
+  commandes: state.commandes,
 });
 
-export default connect(mapStateToProps, { removeCartItem, updateQuantite })(
-  PanierComponent
-);
+export default connect(mapStateToProps, {
+  removeCartItem,
+  updateQuantite,
+  clearCart,
+  addToCommande,
+})(PanierComponent);

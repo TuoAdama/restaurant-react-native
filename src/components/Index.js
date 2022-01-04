@@ -1,7 +1,7 @@
 import React from 'react'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import PanierComponent from './PanierComponent'
-import CommandesComponent from './CommandesComponent'
+import CommandesScreen from '../screens/CommandesScreen'
 import HomeScreen from '../screens/HomeScreen'
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -33,7 +33,7 @@ const Index = () => {
             
             <Tab.Screen
                 name="Commandes"
-                component={CommandesComponent}
+                component={CommandesScreen}
                 options={{
                     headerShown:false,
                     tabBarLabel:"Commandes",

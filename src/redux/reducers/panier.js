@@ -1,7 +1,14 @@
-import { ADD_TO_CART, REMOVE_TO_CART, UPDATE_QUANTITY } from "../actionTypes";
+import {
+  ADD_TO_CART,
+  ADD_TO_COMMANDE,
+  CLEAR_CART,
+  REMOVE_TO_CART,
+  UPDATE_QUANTITY,
+} from "../actionTypes";
 
 const initialState = {
   panier: [],
+  commandes: [],
 };
 
 export default function (state = initialState, action) {
@@ -27,6 +34,16 @@ export default function (state = initialState, action) {
             ? item
             : { ...item, quantite: action.payload.quantite }
         ),
+      };
+    case CLEAR_CART:
+      return {
+        ...state,
+        panier: [],
+      };
+    case ADD_TO_COMMANDE:
+      return {
+        ...state,
+        commandes: [...state.commandes, action.payload],
       };
     default:
       return state;
