@@ -5,14 +5,20 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import CartItem from "./CartItem";
 import { connect } from "react-redux";
 import { removeCartItem, updateQuantite } from "../redux/actions";
-import 'intl';
+import "intl";
 import "intl/locale-data/jsonp/fr";
+import Dialog from "react-native-dialog";
+import { TextInput } from "react-native-gesture-handler";
 
 const PanierComponent = (props) => {
+  const [visible, setVisible] = React.useState(false);
+  var numTable = '';
+
   const onRemove = (i) => {
     props.removeCartItem(i);
   };
@@ -32,13 +38,21 @@ const PanierComponent = (props) => {
   };
 
   const handlerConfirm = () => {
-    console.log(props.panier);
-  }
-  
+    setVisible(true);
+  };
 
   const showPanier = () => {
     return (
       <View style={styles.container}>
+        <Dialog.Container visible={visible}>
+          <Text style={styles.confirmTitle}>Numero de table:</Text>
+          <TextInput
+            style={styles.confirmInput}
+            autoCapitalize={'characters'}
+            onChangeText={(value) => (numTable = value)}
+          />
+          <Button title="valider" onPress={() => setVisible(false)} />
+        </Dialog.Container>
         <FlatList
           data={props.panier}
           renderItem={({ item }) => (
@@ -98,15 +112,15 @@ const styles = StyleSheet.create({
   },
   total: {
     fontSize: 18,
-    marginBottom:20,
+    marginBottom: 20,
   },
   cartTotal: {
-    marginTop:10,
+    marginTop: 10,
     borderRadius: 20,
     height: 130,
-    justifyContent:"center",
-    alignItems:"center",
-    backgroundColor:"#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -116,11 +130,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.41,
     elevation: 2,
   },
-  btn:{
-    padding:15,
-    width:'50%',
-    borderRadius:25,
-    backgroundColor:'#e91e63',
+  btn: {
+    padding: 15,
+    width: "50%",
+    borderRadius: 25,
+    backgroundColor: "#e91e63",
     shadowColor: "#000",
     shadowOffset: {
       width: 3,
@@ -130,10 +144,23 @@ const styles = StyleSheet.create({
     shadowRadius: 3.41,
     elevation: 3,
   },
-  btnText:{
-    textAlign:'center',
-    color:'white',
+  btnText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 18,
+  },
+  confirmInput: {
+    padding: 10,
+    borderRadius: 15,
+    marginVertical: 15,
+    backgroundColor: "#EBEBEB",
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "400",
+  },
+  confirmTitle:{
     fontSize:18,
+    fontWeight:'400'
   }
 });
 
