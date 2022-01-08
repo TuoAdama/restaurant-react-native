@@ -1,12 +1,12 @@
 import React from 'react'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import PanierComponent from './PanierComponent'
 import CommandesScreen from '../screens/CommandesScreen'
 import HomeScreen from '../screens/HomeScreen'
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native'
+import PanierScreen from '../screens/PanierScreen'
 
 
 const Index = () => {
@@ -44,7 +44,7 @@ const Index = () => {
             
             <Tab.Screen
                 name="Panier"
-                component={PanierComponent}
+                component={PanierScreen}
                 options={{
                     tabBarLabel:"Panier",
                     tabBarIcon: ({ color, size }) => (
