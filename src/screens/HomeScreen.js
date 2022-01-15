@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import CategorieComponent from "../components/CategorieComponent";
 import PlatItem from "../components/PlatItem";
-import SearchComponent from "../components/SearchComponent";
+import SearchInput from "../components/SearchInput";
 import { FlatGrid } from "react-native-super-grid";
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
@@ -109,7 +109,7 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
-          <SearchComponent onChangeText={this.onSearch.bind(this)} />
+          <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}

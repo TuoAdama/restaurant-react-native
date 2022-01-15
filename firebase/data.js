@@ -1,6 +1,11 @@
 import { firebase } from "./config";
+import { currentDate, currentDateTime, currentTime } from "../src/utils/date";
 
 const firestore = firebase.firestore();
+
+const getUserUID = () => {
+  return firebase.auth().currentUser.uid;
+};
 
 export const getPlats = async () => {
   const platsCollection = await firestore.collection("plats").get();
@@ -24,17 +29,46 @@ export const getCategories = async () => {
 export const storeCommande = async (commandes) => {
   await firestore
     .collection("commandes")
-    .doc(commandes.table)
-    .set(commandes)
-    .then(() => console.log("commandes enregistrées"));
+    .doc(currentDate())
+    .collection(commandes.personnel.uid)
+    .add({ commandes })
+    .then(() => console.log("commandes enregistrées"))
+    .catch((error) => console.log(error));
 };
 
-export const getAllCommandes = async (commandes) => {
+export const getAllCommandes = async () => {
   const commandesCollection = await firestore.collection("commandes").get();
 
   return commandesCollection.docs.map((doc) => ({
     table: doc.data().table,
     date: doc.data().date,
     commandes: doc.data().commandes,
+  }));
+};
+
+export const getPersonnelByUserId = async () => {
+  const personnelDoc = await firestore
+    .collection("personnels")
+    .doc(firebase.auth().currentUser.uid)
+    .get();
+
+  return personnelDoc.data();
+};
+
+export const getCommandes = async () => {
+
+  const personnelCmdRef = await firestore
+    .collection("commandes")
+    .doc(currentDate())
+    .collection(getUserUID())
+    .get();
+
+  if (personnelCmdRef.empty) {
+    console.log("Aucune commande trouvée");
+    return [];
+  }
+  return personnelCmdRef.docs.map((item) => ({
+    id:item.id,
+    ...item.data().commandes
   }));
 };

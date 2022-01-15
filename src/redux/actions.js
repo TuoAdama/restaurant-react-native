@@ -3,7 +3,6 @@ import {
   UPDATE_QUANTITY,
   REMOVE_TO_CART,
   CLEAR_CART,
-  ADD_TO_COMMANDE,
 } from "./actionTypes";
 
 export const addToCart = (item) => ({
@@ -30,11 +29,4 @@ export const removeCartItem = (id) => ({
 
 export const clearCart = () => ({
   type: CLEAR_CART,
-});
-
-export const addToCommande = (commande) => ({
-  type: ADD_TO_COMMANDE,
-  payload: {
-    ...commande,
-  },
 });

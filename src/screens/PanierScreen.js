@@ -10,16 +10,13 @@ import {
 } from "react-native";
 import CartItem from "../components/CartItem";
 import { connect } from "react-redux";
-import {
-  removeCartItem,
-  updateQuantite,
-  clearCart,
-  addToCommande,
-} from "../redux/actions";
+import { removeCartItem, updateQuantite, clearCart } from "../redux/actions";
+import { addToCommande } from "../redux/actions/commandesAction";
 import "intl";
 import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
-import { storeCommande } from "../../firebase/data";
+import { storeCommande, getPersonnelByUserId } from "../../firebase/data";
+import { currentDateTime } from "../utils/date";
 
 const PanierScreen = (props) => {
   const [visible, setVisible] = React.useState(false);
@@ -44,27 +41,23 @@ const PanierScreen = (props) => {
     props.updateQuantite(item, qte);
   };
 
-  const handlerConfirm = () => {
+  const handlerConfirm = async () => {
     setVisible(true);
   };
 
-  const handlerValid = () => {
+  const handlerValid = async () => {
     setVisible(false);
 
-    const date = new Date();
-    const currentDate = date.toLocaleDateString().replaceAll("/", "-");
-    const currentTime = date.toLocaleTimeString();
-
-    const now = currentDate + " " + currentTime;
+    const personnel = await getPersonnelByUserId();
 
     const commande = {
+      personnel,
       table: tableSelected,
-      date: now,
-      status:'EN COURS',
-      commandes: props.panier,
+      createdAt: currentDateTime(),
+      status: "EN COURS",
+      items: props.panier,
     };
-    storeCommande(commande).then((result) => console.log(result));
-    props.addToCommande(commande);
+    await storeCommande(commande);
     props.clearCart();
   };
 

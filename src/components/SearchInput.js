@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 
-export default class SearchComponent extends Component {
+export default class SearchInput extends Component {
   constructor(props) {
     super(props);
   }
