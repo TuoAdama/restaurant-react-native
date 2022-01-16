@@ -5,7 +5,7 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 import 'intl';
 import "intl/locale-data/jsonp/fr";
 
-const CartItem = (props) => {
+const PanierItem = (props) => {
   return (
     <View style={[styles.container, styles.border]}>
       <View style={styles.cartImage}>
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CartItem;
+export default PanierItem;

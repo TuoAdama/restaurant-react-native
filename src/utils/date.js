@@ -1,13 +1,13 @@
-const date = new Date();
-
 export const currentDate = () => {
-    return date.toLocaleDateString().replace(/\//g, "-");
-}
+  const date = new Date();
+  return date.toLocaleDateString().replace(/\//g, "-");
+};
 
 export const currentTime = () => {
-    return date.toLocaleTimeString();
-}
+  const date = new Date();
+  return date.toLocaleTimeString();
+};
 
 export const currentDateTime = () => {
-    return currentDate()+' '+currentTime();
-}
+  return currentDate() + " " + currentTime();
+};

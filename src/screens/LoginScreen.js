@@ -5,16 +5,19 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  StatusBar,
+  ActivityIndicator,
 } from "react-native";
 
 import { firebase } from "../../firebase/config";
+import appColors from "../assets/colors";
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
   const [password, onChangePassword] = React.useState("tuoadama123456");
+  const [disableButton, setDisableButton] = React.useState(false);
 
   const onSubmitHandler = () => {
+    setDisableButton(true);
     firebase
       .auth()
       .signInWithEmailAndPassword(username, password)
@@ -34,6 +37,7 @@ export default function LoginScreen({ navigation }) {
       })
       .catch((error) => {
         alert(error);
+        setDisableButton(false)
       });
   };
 
@@ -61,11 +65,22 @@ export default function LoginScreen({ navigation }) {
           onChangeText={onChangePassword}
           secureTextEntry={true}
         />
-        <TouchableHighlight style={styles.btn} onPress={onSubmitHandler}>
-          <Text style={styles.btnText}>Se connecter</Text>
+        <TouchableHighlight
+          style={[
+            styles.btn,
+            { backgroundColor: disableButton ? "#dddddd" : "#557FF1" },
+          ]}
+          onPress={onSubmitHandler}
+          disabled={disableButton}
+        >
+          {disableButton ? (
+            <ActivityIndicator size="large" color="black" />
+          ) : (
+            <Text style={styles.btnText}>Se connecter</Text>
+          )}
         </TouchableHighlight>
         <TouchableHighlight
-          style={[styles.btn, { backgroundColor: "red" }]}
+          style={[styles.btn, { backgroundColor: appColors.primary }]}
           onPress={onRegisterHandler}
         >
           <Text style={styles.btnText}>S'enregistrer</Text>

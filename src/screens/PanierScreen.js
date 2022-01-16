@@ -8,7 +8,7 @@ import {
   Button,
   Picker,
 } from "react-native";
-import CartItem from "../components/CartItem";
+import PanierItem from "../components/PanierItem";
 import { connect } from "react-redux";
 import { removeCartItem, updateQuantite, clearCart } from "../redux/actions";
 import { addToCommande } from "../redux/actions/commandesAction";
@@ -17,6 +17,7 @@ import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
 import { storeCommande, getPersonnelByUserId } from "../../firebase/data";
 import { currentDateTime } from "../utils/date";
+import appColors from '../assets/colors'
 
 const PanierScreen = (props) => {
   const [visible, setVisible] = React.useState(false);
@@ -47,7 +48,6 @@ const PanierScreen = (props) => {
 
   const handlerValid = async () => {
     setVisible(false);
-
     const personnel = await getPersonnelByUserId();
 
     const commande = {
@@ -56,6 +56,7 @@ const PanierScreen = (props) => {
       createdAt: currentDateTime(),
       status: "EN COURS",
       items: props.panier,
+      total:getTotal()
     };
     await storeCommande(commande);
     props.clearCart();
@@ -81,14 +82,14 @@ const PanierScreen = (props) => {
           <View style={{ marginBottom: 12 }}></View>
           <Button
             title="annuler"
-            color="#e63946"
+            color={appColors.primary}
             onPress={() => setVisible(false)}
           />
         </Dialog.Container>
         <FlatList
           data={props.panier}
           renderItem={({ item }) => (
-            <CartItem
+            <PanierItem
               item={item}
               onRemove={() => onRemove(item.id)}
               incrementQuantite={() => incrementQuantite(item.id)}
@@ -99,7 +100,7 @@ const PanierScreen = (props) => {
           horizontal={false}
         />
         <View style={styles.cartTotal}>
-          <Text style={styles.total}>Total : {printTotal()} FCFA</Text>
+          <Text style={styles.total}>Total : {getTotal()} FCFA</Text>
           <TouchableOpacity style={styles.btn} onPress={handlerConfirm}>
             <Text style={styles.btnText}>confirmer</Text>
           </TouchableOpacity>
@@ -108,7 +109,7 @@ const PanierScreen = (props) => {
     );
   };
 
-  const printTotal = () => {
+  const getTotal = () => {
     let total = 0;
     props.panier.forEach((item) => {
       total += item.prix * item.quantite;

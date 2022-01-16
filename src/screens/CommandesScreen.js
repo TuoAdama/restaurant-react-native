@@ -19,6 +19,7 @@ class CommandesScreen extends React.Component {
     super(props);
     this.state = {
       commandes: [],
+      commandeFiltred: [],
       showLoading: true,
       refreshing: false,
     };
@@ -33,6 +34,7 @@ class CommandesScreen extends React.Component {
       .then((response) => {
         this.setState({
           commandes: response,
+          commandeFiltred:response,
           showLoading: false,
           refreshing: false,
         });
@@ -79,8 +81,13 @@ class CommandesScreen extends React.Component {
     );
   }
 
-  onChangeText = () => {
-    console.log("Text us change");
+  onChangeText = (value) => {
+    const results = this.state.commandes.filter(
+      (item) => item.table.indexOf(value) != -1
+    );
+    this.setState({
+      commandeFiltred: results,
+    });
   };
 
   render() {
@@ -91,13 +98,18 @@ class CommandesScreen extends React.Component {
     ) : (
       <View style={styles.container}>
         <>
-          <SearchInput onChangeText={this.onChangeText} />
+          <SearchInput
+            onChangeText={this.onChangeText}
+            placeholder="Numéro de table"
+          />
           <FlatList
             style={styles.liste}
-            data={this.state.commandes}
+            data={this.state.commandeFiltred}
             refreshControl={this.handeRefreshControl()}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <CommandeItem key={item.id} commande={item}/>}
+            renderItem={({ item }) => (
+              <CommandeItem key={item.id} commande={item} />
+            )}
           />
         </>
       </View>
