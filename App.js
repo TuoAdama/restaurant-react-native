@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import store from './src/redux/store'
 import {Provider} from 'react-redux'
 import RegisterScreen from './src/screens/RegisterScreen';
+import PlatDetailScreen from './src/screens/PlatDetailScreen';
 
 export default function App() {
 
@@ -17,6 +18,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="LoginScreen">
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:false}}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{headerShown:false}}/>
+          <Stack.Screen name="PlatDetail" component={PlatDetailScreen} options={{headerShown:false}}/>
           <Stack.Screen name="Index" component={Index} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>

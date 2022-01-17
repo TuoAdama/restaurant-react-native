@@ -88,6 +88,10 @@ class HomeScreen extends Component {
     });
   }
 
+  onTapPlatItem = (item) => {
+    console.log(item);
+  }
+
   getPlatByCurrentCategorie(currentCategorie) {
     let results = this.allPlats;
 
@@ -130,7 +134,7 @@ class HomeScreen extends Component {
           data={this.state.plats}
           spacing={15}
           renderItem={({ item }) => (
-            <PlatItem item={item} onAdd={() => this.addItem(item)} />
+            <PlatItem item={item} onAdd={() => this.addItem(item)} onTap={this.onTapPlatItem} />
           )}
         />
       </View>
