@@ -1,40 +1,41 @@
 import React from "react";
 import {
-  Pressable,
   StyleSheet,
   Text,
   View,
   Image,
   TouchableHighlight,
+  TouchableOpacity
 } from "react-native";
 
-import 'intl';
+import "intl";
 import "intl/locale-data/jsonp/fr";
 
 import { Ionicons } from "@expo/vector-icons";
 
 const PlatItem = (props) => {
   return (
-    <View>
-      <Pressable style={styles.container}>
-        <View>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            source={{uri:props.item.images[0]}}
-          />
-          <View style={styles.description}>
-            <View>
-              <Text>{props.item.libelle}</Text>
-              <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
-            </View>
-            <TouchableHighlight onPress={props.onAdd}>
-              <Ionicons name="ios-add-circle-outline" size={30} color="black" />
-            </TouchableHighlight>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => props.onTap(props.item)}
+    >
+      <View>
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={{ uri: props.item.images[0] }}
+        />
+        <View style={styles.description}>
+          <View>
+            <Text>{props.item.libelle}</Text>
+            <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
           </View>
+          <TouchableHighlight onPress={props.onAdd}>
+            <Ionicons name="ios-add-circle-outline" size={30} color="black" />
+          </TouchableHighlight>
         </View>
-      </Pressable>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 

@@ -17,24 +17,26 @@ class HomeScreen extends Component {
       visible: false,
       itemSelected: null,
       plats: [],
-      categories:[],
+      categories: [],
       categorieSelected: null,
     };
 
-    this.allPlats = []
+    this.allPlats = [];
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
-    Promise.all([getPlats(), getCategories()]).then(([platsRes, categoriesRes]) => {
-      this.allPlats = platsRes;
-      this.setState({
-        plats: platsRes,
-        categories:categoriesRes,
-        categorieSelected: categoriesRes.find(item => item.id == 0)
-      })
-    });
+    Promise.all([getPlats(), getCategories()]).then(
+      ([platsRes, categoriesRes]) => {
+        this.allPlats = platsRes;
+        this.setState({
+          plats: platsRes,
+          categories: categoriesRes,
+          categorieSelected: categoriesRes.find((item) => item.id == 0),
+        });
+      }
+    );
   }
 
   onSearch(search) {
@@ -89,8 +91,10 @@ class HomeScreen extends Component {
   }
 
   onTapPlatItem = (item) => {
-    console.log(item);
-  }
+    this.props.navigation.navigate("DetailPlat", {
+      item,
+    });
+  };
 
   getPlatByCurrentCategorie(currentCategorie) {
     let results = this.allPlats;
@@ -134,7 +138,11 @@ class HomeScreen extends Component {
           data={this.state.plats}
           spacing={15}
           renderItem={({ item }) => (
-            <PlatItem item={item} onAdd={() => this.addItem(item)} onTap={this.onTapPlatItem} />
+            <PlatItem
+              item={item}
+              onAdd={() => this.addItem(item)}
+              onTap={this.onTapPlatItem}
+            />
           )}
         />
       </View>

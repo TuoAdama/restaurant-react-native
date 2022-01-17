@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-const PlatDetailScreen = () => {
+const PlatDetailScreen = ({route, navigation}) => {
+    const item = route.params.item
     return (
-        <View style={style.container}>
-            <Text>Je suis detail</Text>
+        <View style={styles.container}>
+            <Text>{item.libelle} : {item.prix} FCFA</Text>
         </View>
     )
 }

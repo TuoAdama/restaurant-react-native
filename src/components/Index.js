@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native'
 import PanierScreen from '../screens/PanierScreen'
+import PlatToDetailNavigation from '../screens/PlatToDetailNavigation';
 
 
 const Index = () => {
@@ -21,8 +22,8 @@ const Index = () => {
             }}
         >
             <Tab.Screen
-                name="Home"
-                component={HomeScreen}
+                name="PlatToDetailNavigation"
+                component={PlatToDetailNavigation}
                 options={{
                     headerShown:false,
                     tabBarLabel:"Home",
