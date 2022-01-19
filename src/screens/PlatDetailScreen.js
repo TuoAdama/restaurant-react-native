@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 
 const PlatDetailScreen = (props) => {
   const item = props.route.params.item;
+  console.log(item);
 
   const [quantite, setQuantite] = React.useState(1);
 
@@ -25,44 +26,57 @@ const PlatDetailScreen = (props) => {
     });
   };
 
+  const capitilizeFirstLetter = (value) => {
+    return value[0].toUpperCase() + value.slice(1).toLowerCase();
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar />
       <View style={styles.headerContainer}>
-        <BackButton size={45} />
-        <Text>{item.libelle}</Text>
+        <BackButton size={45} onPress={() => props.navigation.goBack()} />
       </View>
       <View style={styles.centerContainer}>
         <Image
-          source={require("../assets/images/coca.jpg")}
+          source={{ uri: item.images[0] }}
           resizeMode="contain"
-          style={{ height: "80%", width: "50%" }}
+          style={{ height: "80%", width: "70%" }}
         />
+        <View style={styles.quantiteContainer}>
+          <QuantiteButton
+            type="decrement"
+            color={appColors.primary}
+            onPress={() => {
+              if (quantite > 1) {
+                setQuantite(quantite - 1);
+              }
+            }}
+          />
+          <Text style={styles.quantite}>{quantite}</Text>
+          <QuantiteButton
+            type="increment"
+            onPress={() => setQuantite(quantite + 1)}
+            color={appColors.primary}
+          />
+        </View>
       </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.priceContainer}>
-          <Text style={styles.prix}>{item.prix} FCFA</Text>
-          <View style={styles.quantiteContainer}>
-            <QuantiteButton
-              type="decrement"
-              color={appColors.primary}
-              onPress={() => {
-                if (quantite > 1) {
-                  setQuantite(quantite - 1);
-                }
-              }}
-            />
-            <Text style={styles.quantite}>{quantite}</Text>
-            <QuantiteButton
-              type="increment"
-              onPress={() => setQuantite(quantite + 1)}
-              color={appColors.primary}
-            />
+      <View style={styles.description}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {capitilizeFirstLetter(item.libelle)}
+          </Text>
+          <Text style={styles.subtitle}>
+            {capitilizeFirstLetter(item.categorie)}
+          </Text>
+          <View>
+            <Text style={styles.descriptionLibelle}>Description</Text>
+            <Text>Aucune description</Text>
           </View>
         </View>
         <View style={styles.addToCart}>
-          <View>
-            <Text style={styles.total}>
+          <View style={styles.total}>
+            <Text style={styles.libelleTotal}>Total</Text>
+            <Text style={styles.priceTotal}>
               {new Intl.NumberFormat().format(quantite * item.prix)} FCFA
             </Text>
           </View>
@@ -101,33 +115,21 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  bottomContainer: {
+  description: {
     width: "100%",
     flex: 3,
-    paddingTop: 30,
-    paddingHorizontal: 30,
-    backgroundColor: "#F1F1F1",
-    borderTopEndRadius: 50,
-    borderTopStartRadius: 50,
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingEnd: 10,
     justifyContent: "space-between",
-    shadowOffset: {
-      width: 30,
-      height: 10,
-    },
-    shadowRadius: 30,
-    shadowColor: "black",
-    elevation: 4,
-    shadowOpacity: 0.5,
   },
-  prix: {
-    fontSize: 25,
+  title: {
+    fontSize: 30,
     fontWeight: "bold",
+    opacity: 0.6,
   },
-  priceContainer: {
-    paddingHorizontal: 20,
-    flexDirection: "row",
+  titleContainer: {
     justifyContent: "space-between",
-    alignItems: "center",
   },
   quantiteContainer: {
     flexDirection: "row",
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 200,
-    height: 40,
+    height: 60,
     borderRadius: 50,
     backgroundColor: appColors.primary,
     shadowOffset: { height: 10, width: 2 },
@@ -154,15 +156,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  total: {
-    fontSize: 20,
+  priceTotal: {
+    fontSize: 23,
     fontWeight: "bold",
-    marginHorizontal: 20,
   },
   addToCart: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 10,
   },
+  subtitle: {
+    fontSize: 20,
+    color: appColors.primary,
+  },
+  libelleTotal: {
+    fontSize: 18,
+    opacity: 0.5,
+  },
+  descriptionLibelle:{
+    marginTop:15,
+    fontSize:20,
+    color:'black'
+  }
 });
