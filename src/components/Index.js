@@ -10,7 +10,7 @@ import PanierScreen from "../screens/PanierScreen";
 import PlatToDetailNavigation from "../screens/PlatToDetailNavigation";
 import appColors from "../assets/colors";
 
-const Index = () => {
+const Index = ({navigation}) => {
   const Tab = createBottomTabNavigator();
 
   return (
@@ -21,8 +21,9 @@ const Index = () => {
       }}
     >
       <Tab.Screen
-        name="PlatToDetailNavigation"
-        component={PlatToDetailNavigation}
+        name="Home"
+        component={HomeScreen}
+        initialParams={{navigationToDetail:navigation}}
         options={{
           headerShown: false,
           tabBarLabel: "Home",

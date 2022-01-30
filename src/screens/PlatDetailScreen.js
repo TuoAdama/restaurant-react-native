@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,16 +6,24 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import appColors from "../assets/colors";
 import BackButton from "../components/BackButton";
 import QuantiteButton from "../components/QuantiteButton";
 import { addToCart } from "../redux/actions";
 import { connect } from "react-redux";
+import { getPlatByCategorieLibelle } from "../../firebase/data";
 
 const PlatDetailScreen = (props) => {
   const item = props.route.params.item;
-  console.log(item);
+  const navigation = props.navigation;
+
+  const [suggestionItems, setSuggestionItems] = useState([])
+
+  useEffect(() => {
+    getPlatByCategorieLibelle(item).then(res => setSuggestionItems(res))
+  }, [])
 
   const [quantite, setQuantite] = React.useState(1);
 
@@ -26,9 +34,29 @@ const PlatDetailScreen = (props) => {
     });
   };
 
+
   const capitilizeFirstLetter = (value) => {
     return value[0].toUpperCase() + value.slice(1).toLowerCase();
   };
+
+  const suggestionItemElement = (item) => {
+    console.log(item.images[0]);
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("PlatDetail", {
+            item,
+          })
+        }}
+        style={styles.suggestionChild}
+      >
+        <Image resizeMode="contain"
+          source={{ uri: item.images[0] }}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -68,10 +96,16 @@ const PlatDetailScreen = (props) => {
           <Text style={styles.subtitle}>
             {capitilizeFirstLetter(item.categorie)}
           </Text>
-          <View>
-            <Text style={styles.descriptionLibelle}>Description</Text>
-            <Text>Aucune description</Text>
-          </View>
+          {suggestionItems.length == 0 || <View>
+            <Text style={styles.descriptionLibelle}>Suggestions</Text>
+            <ScrollView
+              horizontal={true}
+              contentContainerStyle={styles.suggestion}
+              showsHorizontalScrollIndicator={false}
+            >
+              {suggestionItems.map((item) => suggestionItemElement(item))}
+            </ScrollView>
+          </View>}
         </View>
         <View style={styles.addToCart}>
           <View style={styles.total}>
@@ -124,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
     opacity: 0.6,
   },
@@ -143,8 +177,8 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: "center",
     justifyContent: "center",
-    width: 200,
-    height: 60,
+    width: 150,
+    height: 40,
     borderRadius: 50,
     backgroundColor: appColors.primary,
     shadowOffset: { height: 10, width: 2 },
@@ -157,13 +191,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   priceTotal: {
-    fontSize: 23,
+    fontSize: 20,
     fontWeight: "bold",
   },
   addToCart: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginBottom: 10,
   },
   subtitle: {
@@ -174,9 +208,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     opacity: 0.5,
   },
-  descriptionLibelle:{
-    marginTop:15,
-    fontSize:20,
-    color:'black'
-  }
+  descriptionLibelle: {
+    marginTop: 20,
+    fontSize: 20,
+    color: "black",
+    fontWeight: "700",
+    opacity: 0.5,
+  },
+  suggestion: {
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "red",
+    height: 100,
+  },
+  suggestionChild: {
+    marginRight: 10,
+    width: 70,
+    height: 60,
+    padding: 5,
+    shadowOffset: { height: 1, width: 2 },
+    shadowColor: "black",
+    elevation: 2,
+  },
 });

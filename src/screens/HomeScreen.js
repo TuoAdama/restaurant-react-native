@@ -91,7 +91,10 @@ class HomeScreen extends Component {
   }
 
   onTapPlatItem = (item) => {
-    this.props.navigation.navigate("DetailPlat", {
+    this.props
+    .route
+    .params
+    .navigationToDetail.navigate("PlatDetail", {
       item,
     });
   };

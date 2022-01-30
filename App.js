@@ -19,7 +19,7 @@ export default function App() {
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:false}}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{headerShown:false}}/>
           <Stack.Screen name="PlatDetail" component={PlatDetailScreen} options={{headerShown:false}}/>
-          <Stack.Screen name="Index" component={Index} options={{headerShown:false}}/>
+          <Stack.Screen name="Index" component={Index} options={{headerShown:false, }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

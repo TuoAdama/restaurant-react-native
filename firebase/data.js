@@ -9,14 +9,16 @@ const getUserUID = () => {
 
 export const getPlats = async () => {
   const platsCollection = await firestore.collection("plats").get();
-  return platsCollection.docs.map((doc) => ({
-    id: doc.id,
-    libelle: doc.data().libelle,
-    categorie: doc.data().categorie,
-    prix: doc.data().prix,
-    images: doc.data().images,
-  }));
+  return platsCollection.docs.map((doc) => platFormat(doc));
 };
+
+export const platFormat = (doc) => ({
+  id: doc.id,
+  libelle: doc.data().libelle,
+  categorie: doc.data().categorie,
+  prix: doc.data().prix,
+  images: doc.data().images,
+});
 
 export const getCategories = async () => {
   const categoriesCollection = await firestore.collection("categories").get();
@@ -56,7 +58,6 @@ export const getPersonnelByUserId = async () => {
 };
 
 export const getCommandes = async () => {
-
   const personnelCmdRef = await firestore
     .collection("commandes")
     .doc(currentDate())
@@ -68,7 +69,39 @@ export const getCommandes = async () => {
     return [];
   }
   return personnelCmdRef.docs.map((item) => ({
-    id:item.id,
-    ...item.data().commandes
+    id: item.id,
+    ...item.data().commandes,
   }));
 };
+
+export const getPlatByCategorieLibelle = (item) => {
+  const platsCollection = firestore
+    .collection("plats")
+    .where("categorie", "==", item.categorie)
+    .get();
+
+  const promise = new Promise((resolve, reject) => {
+    platsCollection.then((querySnapshot) => {
+      const docs = querySnapshot.docs;
+      const size = docs.length;
+
+      var plats = []
+
+      if (size > 1) {
+        plats = docs.map(document => platFormat(document))
+      }
+      resolve(plats)
+    });
+  })
+
+  return promise;
+};
+
+
+
+/**
+ * 
+ * [] Définir la fonction permettant de gerer les plat de manière aléatoire.
+ * [] Passer cette fonction à un Promise
+ * [] Retourner le Promise
+ */
