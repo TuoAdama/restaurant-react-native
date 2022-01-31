@@ -64,9 +64,8 @@ const styles = StyleSheet.create({
   },
   description: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    width:'70%'
   },
   section:{
     width:'100%',

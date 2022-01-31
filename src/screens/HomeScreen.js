@@ -42,7 +42,7 @@ class HomeScreen extends Component {
     let results = this.getPlatByCurrentCategorie(this.state.categorieSelected);
 
     if (search.trim().length) {
-      results = this.state.plats.filter((item) =>
+      results = this.allPlats.filter((item) =>
         item.libelle.toLowerCase().startsWith(search.trim().toLowerCase())
       );
     }
