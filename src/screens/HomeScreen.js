@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import CategorieComponent from "../components/CategorieComponent";
 import PlatItem from "../components/PlatItem";
 import SearchInput from "../components/SearchInput";
-import { FlatGrid } from "react-native-super-grid";
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import CommandeDialogComponent from "../components/CommandeDialogComponent";
@@ -92,11 +91,11 @@ class HomeScreen extends Component {
 
   onTapPlatItem = (item) => {
     this.props
-    .route
-    .params
-    .navigationToDetail.navigate("PlatDetail", {
-      item,
-    });
+      .route
+      .params
+      .navigationToDetail.navigate("PlatDetail", {
+        item,
+      });
   };
 
   getPlatByCurrentCategorie(currentCategorie) {
@@ -135,11 +134,12 @@ class HomeScreen extends Component {
             )}
           />
         </View>
-        <FlatGrid
-          itemDimension={150}
+        <FlatList
+          style={styles.platList}
+          numColumns={2}
           showsVerticalScrollIndicator={false}
           data={this.state.plats}
-          spacing={15}
+          keyExtractor={(item, index) => index}
           renderItem={({ item }) => (
             <PlatItem
               item={item}
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   plats: {
     flexDirection: "row",
     flexWrap: "wrap",
-  },
+  }
 });
 
 const mapStateToProps = (state) => ({

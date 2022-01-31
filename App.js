@@ -1,7 +1,7 @@
 import * as React from 'react';
 import LoginScreen from './src/screens/LoginScreen';
 import { NavigationContainer} from '@react-navigation/native';
-import Index from './src/components/Index'
+import Home from './navigations/Home';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import store from './src/redux/store'
 import {Provider} from 'react-redux'
@@ -19,7 +19,7 @@ export default function App() {
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:false}}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{headerShown:false}}/>
           <Stack.Screen name="PlatDetail" component={PlatDetailScreen} options={{headerShown:false}}/>
-          <Stack.Screen name="Index" component={Index} options={{headerShown:false, }}/>
+          <Stack.Screen name="Index" component={Home} options={{headerShown:false, }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

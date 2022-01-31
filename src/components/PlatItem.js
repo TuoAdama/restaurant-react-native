@@ -5,7 +5,8 @@ import {
   View,
   Image,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from "react-native";
 
 import "intl";
@@ -13,13 +14,15 @@ import "intl/locale-data/jsonp/fr";
 
 import { Ionicons } from "@expo/vector-icons";
 
+const { width, height } = Dimensions.get('window');
+
 const PlatItem = (props) => {
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => props.onTap(props.item)}
     >
-      <View>
+      <View style={styles.section}>
         <Image
           style={styles.image}
           resizeMode="contain"
@@ -41,6 +44,9 @@ const PlatItem = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: (width - 50) / 2,
+    height: 150,
+    margin:5,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
@@ -49,20 +55,24 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.41,
-    elevation: 2,
+    elevation:2,
+    borderRadius:10,
   },
   image: {
-    height: 150,
-    width: 150,
+    height: 70,
+    width: "80%",
   },
   description: {
-    padding: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    width:'70%'
   },
+  section:{
+    width:'100%',
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
 
 export default PlatItem;

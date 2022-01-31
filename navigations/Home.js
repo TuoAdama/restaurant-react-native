@@ -1,16 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CommandesScreen from "../screens/CommandesScreen";
-import HomeScreen from "../screens/HomeScreen";
+import CommandesScreen from "../src/screens/CommandesScreen";
+import HomeScreen from "../src/screens/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
-import PanierScreen from "../screens/PanierScreen";
-import PlatToDetailNavigation from "../screens/PlatToDetailNavigation";
-import appColors from "../assets/colors";
+import PanierScreen from "../src/screens/PanierScreen";
+import appColors from "../src/assets/colors";
 
-const Index = ({navigation}) => {
+const Home = ({navigation}) => {
   const Tab = createBottomTabNavigator();
 
   return (
@@ -63,4 +61,4 @@ const Index = ({navigation}) => {
   );
 };
 
-export default Index;
+export default Home;
