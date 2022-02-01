@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import CategorieComponent from "../components/CategorieComponent";
-import PlatItem from "../components/PlatItem";
-import SearchInput from "../components/SearchInput";
+import { StyleSheet, View, StatusBar } from "react-native";
+import { CategorieComponent, PlatItem, SearchInput, CommandeDialogComponent } from '../components';
+
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
-import CommandeDialogComponent from "../components/CommandeDialogComponent";
 import { FlatList } from "react-native-gesture-handler";
 import { getCategories, getPlats } from "../../firebase/data";
 
@@ -112,6 +110,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar/>
         <CommandeDialogComponent
           visible={this.state.visible}
           item={this.state.itemSelected}

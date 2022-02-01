@@ -50,10 +50,11 @@ const PlatDetailScreen = (props) => {
     return value[0].toUpperCase() + value.slice(1).toLowerCase();
   };
 
-  const suggestionItemElement = (item) => {
+  const suggestionItemElement = (item, index) => {
     console.log(item.images[0]);
     return (
       <TouchableOpacity
+        key={index}
         onPress={() => {
           navigation.navigate("PlatDetail", {
             item,
@@ -114,7 +115,7 @@ const PlatDetailScreen = (props) => {
               contentContainerStyle={styles.suggestion}
               showsHorizontalScrollIndicator={false}
             >
-              {suggestionItems.map((item) => suggestionItemElement(item))}
+              {suggestionItems.map((item, index) => suggestionItemElement(item, index))}
             </ScrollView>
           </View>}
         </View>
