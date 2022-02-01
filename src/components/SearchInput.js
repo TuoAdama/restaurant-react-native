@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 50,
-    marginVertical: 10,
     padding: 15,
     fontSize: 20,
     fontWeight: "400",

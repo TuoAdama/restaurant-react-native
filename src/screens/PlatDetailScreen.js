@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions
 } from "react-native";
 import appColors from "../assets/colors";
 import { BackButton, QuantiteButton } from '../components';
@@ -14,6 +15,9 @@ import { addToCart } from "../redux/actions";
 import { connect } from "react-redux";
 import { getPlatByCategorieLibelle } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
+
+
+const { width, height } = Dimensions.get('window')
 
 
 const PlatDetailScreen = (props) => {
@@ -37,10 +41,10 @@ const PlatDetailScreen = (props) => {
 
     if (elmt) {
       toast.show('Ajouté au panier !', {
-        type:'success',
-        duration:3000,
-        animationType:'zoom-in',
-        placement:'top'
+        type: 'success',
+        duration: 3000,
+        animationType: 'zoom-in',
+        placement: 'top'
       })
     }
   };
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
   },
   description: {
     width: "100%",
-    flex: 3,
+    flex: 2,
     paddingTop: 15,
     paddingLeft: 20,
     paddingEnd: 10,
@@ -189,8 +193,8 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: "center",
     justifyContent: "center",
-    width: 150,
-    height: 40,
+    width: (width - 20) / 2,
+    height: 45,
     borderRadius: 50,
     backgroundColor: appColors.primary,
     shadowOffset: { height: 10, width: 2 },

@@ -155,7 +155,7 @@ class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: StatusBar.currentHeight,
     marginHorizontal: 13,
   },
   section: {
