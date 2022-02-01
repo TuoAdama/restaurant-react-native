@@ -9,15 +9,17 @@ import {
   ScrollView,
 } from "react-native";
 import appColors from "../assets/colors";
-import BackButton from "../components/BackButton";
-import QuantiteButton from "../components/QuantiteButton";
+import { BackButton, QuantiteButton } from '../components';
 import { addToCart } from "../redux/actions";
 import { connect } from "react-redux";
 import { getPlatByCategorieLibelle } from "../../firebase/data";
+import { useToast } from 'react-native-toast-notifications';
+
 
 const PlatDetailScreen = (props) => {
   const item = props.route.params.item;
   const navigation = props.navigation;
+  const toast = useToast()
 
   const [suggestionItems, setSuggestionItems] = useState([])
 
@@ -28,10 +30,19 @@ const PlatDetailScreen = (props) => {
   const [quantite, setQuantite] = React.useState(1);
 
   const onAdd = () => {
-    props.addToCart({
+    const elmt = props.addToCart({
       ...item,
       quantite,
     });
+
+    if (elmt) {
+      toast.show('Ajouté au panier !', {
+        type:'success',
+        duration:3000,
+        animationType:'zoom-in',
+        placement:'top'
+      })
+    }
   };
 
 
