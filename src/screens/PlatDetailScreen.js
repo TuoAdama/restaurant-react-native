@@ -55,7 +55,6 @@ const PlatDetailScreen = (props) => {
   };
 
   const suggestionItemElement = (item, index) => {
-    console.log(item.images[0]);
     return (
       <TouchableOpacity
         key={index}
