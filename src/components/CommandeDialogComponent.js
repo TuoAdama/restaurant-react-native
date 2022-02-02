@@ -35,6 +35,7 @@ const CommandeDialogComponent = (props) => {
             title="Valider"
             onPress={() => {
               props.onSubmit(qte);
+              setQte(1);
             }}
           />
           <View style={{ marginBottom: 12 }}></View>

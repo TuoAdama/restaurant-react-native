@@ -11,14 +11,13 @@ import {
 } from "react-native";
 import appColors from "../assets/colors";
 import { BackButton, QuantiteButton } from '../components';
-import { addToCart } from "../redux/actions";
+import { addToCart, updateQuantite } from "../redux/actions";
 import { connect } from "react-redux";
 import { getPlatByCategorieLibelle } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
 
 
-const { width, height } = Dimensions.get('window')
-
+const { width } = Dimensions.get('window')
 
 const PlatDetailScreen = (props) => {
   const item = props.route.params.item;
@@ -26,10 +25,18 @@ const PlatDetailScreen = (props) => {
   const toast = useToast()
 
   const [suggestionItems, setSuggestionItems] = useState([])
+  const [exist, setExist] = useState(false)
 
   useEffect(() => {
+    setExist(existsInCart());
     getPlatByCategorieLibelle(item).then(res => setSuggestionItems(res))
-  }, [])
+  },[])
+
+
+  const existsInCart = () => {
+    return props.panier.findIndex((element) => element.id == item.id) != -1;
+  }
+
 
   const [quantite, setQuantite] = React.useState(1);
 
@@ -40,6 +47,9 @@ const PlatDetailScreen = (props) => {
     });
 
     if (elmt) {
+
+      setExist(true)
+
       toast.show('Ajouté au panier !', {
         type: 'success',
         duration: 3000,
@@ -71,6 +81,16 @@ const PlatDetailScreen = (props) => {
         />
       </TouchableOpacity>
     );
+  }
+
+  const update = () => {
+    props.updateQuantite(item, quantite)
+    toast.show('Modifcation effectuée!', {
+      type: 'primary',
+      duration: 3000,
+      animationType: 'zoom-in',
+      placement: 'top'
+    })
   }
 
   return (
@@ -129,8 +149,8 @@ const PlatDetailScreen = (props) => {
               {new Intl.NumberFormat().format(quantite * item.prix)} FCFA
             </Text>
           </View>
-          <TouchableOpacity style={styles.btn} onPress={() => onAdd()}>
-            <Text style={styles.btn_text}>Ajouter au panier</Text>
+          <TouchableOpacity style={[styles.btn, !exist || {backgroundColor:'green'}]} onPress={exist ? () => update() : () => onAdd()}>
+            <Text style={styles.btn_text}>{exist ? 'Modifier' : 'Ajouter au panier'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -138,7 +158,11 @@ const PlatDetailScreen = (props) => {
   );
 };
 
-export default connect(null, { addToCart })(PlatDetailScreen);
+const mapStateToProps = (state) => ({
+  panier: state.panier
+})
+
+export default connect(mapStateToProps, { addToCart, updateQuantite })(PlatDetailScreen);
 
 const styles = StyleSheet.create({
   main: {

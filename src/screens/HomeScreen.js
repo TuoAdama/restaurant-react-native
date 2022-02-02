@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import { FlatList } from "react-native-gesture-handler";
 import { getCategories, getPlats } from "../../firebase/data";
+import { useToast } from 'react-native-toast-notifications';
+
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -19,7 +21,6 @@ class HomeScreen extends Component {
     };
 
     this.allPlats = [];
-
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -69,6 +70,7 @@ class HomeScreen extends Component {
     } else {
       this.props.updateQuantite(selectItem, qte);
     }
+
     this.onClose();
   }
 
@@ -110,7 +112,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar/>
+        <StatusBar />
         <CommandeDialogComponent
           visible={this.state.visible}
           item={this.state.itemSelected}
