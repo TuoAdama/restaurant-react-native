@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, StatusBar } from "react-native";
+import { StyleSheet, View, StatusBar, Button } from "react-native";
 import { CategorieComponent, PlatItem, SearchInput, CommandeDialogComponent } from '../components';
 
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import { addToCart, updateQuantite } from "../redux/actions";
 import { FlatList } from "react-native-gesture-handler";
 import { getCategories, getPlats } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
+import {getAllPlats, getAllCategories} from '../data/ApiRequest'
 
 
 class HomeScreen extends Component {
@@ -25,7 +26,7 @@ class HomeScreen extends Component {
   }
 
   componentWillMount() {
-    Promise.all([getPlats(), getCategories()]).then(
+    Promise.all([getAllPlats(), getAllCategories()]).then(
       ([platsRes, categoriesRes]) => {
         this.allPlats = platsRes;
         this.setState({
@@ -120,6 +121,7 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
+          <Button title="Demo" onPress={() => getAllCategories()} />
           <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}
