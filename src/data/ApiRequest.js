@@ -50,6 +50,28 @@ const getPersonnelCommands = async () => {
     return res.map(item => formatCommande(item));
 }
 
+const storeCommande = (commandes) => {
+    var data = {
+        personnel_id: commandes.personnel.id ?? 1,
+        table: commandes.table,
+        plats: commandes.items
+    };
+
+    console.log(data);
+
+    console.log('SEND DARA');
+
+    fetch(appurl+"/commande/save", {
+        method:'POST',
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+}
+
 const formatCommande = (commande) => ({
     id: commande.commande_id,
     table:commande.commande.table_client.numero_table,
@@ -59,8 +81,8 @@ const formatCommande = (commande) => ({
 });
 
 const login = (email, password) => ({
-    
+
 });
 
 
-export { getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands };
+export { getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande };

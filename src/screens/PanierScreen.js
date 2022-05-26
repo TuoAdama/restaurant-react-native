@@ -15,9 +15,10 @@ import { addToCommande } from "../redux/actions/commandesAction";
 import "intl";
 import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
-import { storeCommande, getPersonnelByUserId } from "../../firebase/data";
+import { getPersonnelByUserId } from "../../firebase/data";
 import { currentDateTime } from "../utils/date";
 import appColors from '../assets/colors'
+import {storeCommande} from '../data/ApiRequest'
 
 const PanierScreen = (props) => {
   const [visible, setVisible] = React.useState(false);
@@ -58,7 +59,8 @@ const PanierScreen = (props) => {
       items: props.panier,
       total:getTotal()
     };
-    await storeCommande(commande);
+    storeCommande(commande)
+    // await storeCommande(commande);
     props.clearCart();
   };
 

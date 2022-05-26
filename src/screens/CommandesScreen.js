@@ -8,7 +8,6 @@ import {
   RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
-import { getCommandes } from "../../firebase/data";
 import CommandeItem from "../components/CommandeItem";
 import SearchInput from "../components/SearchInput";
 import appColors from "../assets/colors";
