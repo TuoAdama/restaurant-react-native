@@ -1,6 +1,5 @@
-import axios from 'axios'
-
 const appurl = "http:///192.168.1.120:8000/api";
+
 
 const getAllPlats = async () => {
     let url = appurl + "/plats";
@@ -14,7 +13,7 @@ const getAllPlats = async () => {
 const getAllCategories = async () => {
     let url = appurl + "/categories";
     var data = await fetch(url).then(response => response.json())
-    data.unshift({id:0, libelle:'Tout'});
+    data.unshift({ id: 0, libelle: 'Tout' });
     return data.map(item => ({ id: item.id, libelle: item.libelle }));
 }
 
@@ -28,4 +27,40 @@ const platFormat = (item) => ({
 });
 
 
-export { getAllPlats, getAllCategories };
+const sendTokenToServer = async (token) => {
+
+    fetch(appurl + "/notification/token/saveOrUpdate", {
+        method: 'POST',
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+            id: 1,
+            token,
+        })
+    }).then(response => response.json())
+        .then(response => console.log(response));
+}
+
+const getPersonnelCommands = async () => {
+
+    var res = await fetch(appurl + "/commandes/1")
+        .then(response => response.json())
+
+    return res.map(item => formatCommande(item));
+}
+
+const formatCommande = (commande) => ({
+    id: commande.commande_id,
+    table:commande.commande.table_client.numero_table,
+    status:commande.commande.etat.libelle,
+    total:commande.quantite*commande.plat.prix,
+    createdAt: commande.created_at,
+});
+
+const login = (email, password) => ({
+    
+});
+
+
+export { getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands };

@@ -13,6 +13,7 @@ import CommandeItem from "../components/CommandeItem";
 import SearchInput from "../components/SearchInput";
 import appColors from "../assets/colors";
 import { ScrollView } from "react-native-gesture-handler";
+import {getPersonnelCommands} from '../data/ApiRequest'
 
 class CommandesScreen extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class CommandesScreen extends React.Component {
   }
 
   retreiveCommande() {
-    getCommandes()
+    getPersonnelCommands()
       .then((response) => {
         this.setState({
           commandes: response,
@@ -44,7 +45,7 @@ class CommandesScreen extends React.Component {
   }
 
   handleShowCommande() {
-    getCommandes().then((response) => {
+    getPersonnelCommands().then((response) => {
       console.log(response);
     });
   }

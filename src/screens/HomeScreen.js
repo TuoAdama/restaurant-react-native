@@ -7,7 +7,19 @@ import { addToCart, updateQuantite } from "../redux/actions";
 import { FlatList } from "react-native-gesture-handler";
 import { getCategories, getPlats } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
-import {getAllPlats, getAllCategories} from '../data/ApiRequest'
+import {getAllPlats, getAllCategories, sendTokenToServer} from '../data/ApiRequest'
+
+import {getRegisterToken} from '../notifications/nofitications';
+import * as Notifications from 'expo-notifications'
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+  }),
+});
 
 
 class HomeScreen extends Component {
@@ -26,6 +38,9 @@ class HomeScreen extends Component {
   }
 
   componentWillMount() {
+
+    getRegisterToken().then(token => sendTokenToServer(token));
+
     Promise.all([getAllPlats(), getAllCategories()]).then(
       ([platsRes, categoriesRes]) => {
         this.allPlats = platsRes;
@@ -121,7 +136,10 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
-          <Button title="Demo" onPress={() => getAllCategories()} />
+          <Button title="Demo" onPress={async () => {
+            let token = await getRegisterToken();
+            sendTokenToServer(token);
+          }} />
           <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}

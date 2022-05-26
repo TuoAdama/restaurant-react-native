@@ -68,10 +68,14 @@ export const getCommandes = async () => {
     console.log("Aucune commande trouvée");
     return [];
   }
-  return personnelCmdRef.docs.map((item) => ({
+  var dat =  personnelCmdRef.docs.map((item) => ({
     id: item.id,
     ...item.data().commandes,
   }));
+
+  console.log(dat);
+
+  return dat;
 };
 
 export const getPlatByCategorieLibelle = (item) => {

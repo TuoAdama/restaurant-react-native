@@ -71,3 +71,8 @@ export const categories = [
   { id: 2, libelle: "boisson" },
   { id: 3, libelle: "sandwich" },
 ];
+
+export const personnel = {}
+
+
+export {personnel};
