@@ -13,7 +13,6 @@ import appColors from "../assets/colors";
 import { BackButton, QuantiteButton } from '../components';
 import { addToCart, updateQuantite } from "../redux/actions";
 import { connect } from "react-redux";
-import { getPlatByCategorieLibelle } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
 
 

@@ -89,11 +89,20 @@ const login = async (email, password) => {
 };
 
 
-const getHeader = () => ({
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${global.personnel.token}`
-})
+const getHeader = () => {
+    var header = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    };
+
+    if(global.personnel != null){
+        if(global.personnel.token){
+            header['Authorization'] =  global.personnel.token;
+        }
+    }
+
+    return header;
+}
 
 const registerPersonnel = (name, email, password) => {
     var result = fetch(appurl + "/user/register", {

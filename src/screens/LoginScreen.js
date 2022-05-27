@@ -10,7 +10,6 @@ import {
 
 import appColors from "../assets/colors";
 import { login } from '../data/ApiRequest'
-import '../data/data';
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
