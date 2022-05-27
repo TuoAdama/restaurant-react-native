@@ -136,10 +136,7 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
-          <Button title="Demo" onPress={async () => {
-            let token = await getRegisterToken();
-            sendTokenToServer(token);
-          }} />
+          <Button title="Demo" onPress={() => console.log(global.personnel) } />
           <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}

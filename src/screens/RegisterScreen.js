@@ -5,24 +5,51 @@ import {
   TextInput,
   TouchableHighlight,
   View,
+  ActivityIndicator
 } from "react-native";
 
-import { firebase } from "../../firebase/config";
+import { registerPersonnel } from '../data/ApiRequest'
 
 const RegisterScreen = ({ navigation }) => {
   const [nom, setNom] = React.useState("");
   const [prenom, setPrenom] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [disabled, setDisabled] = React.useState(false);
 
   const onSubmit = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
-      .then((credential) => {
-        storePersonnel(credential.user);
+
+    setDisabled(true);
+
+    let firstname = nom.trim().toLowerCase();
+    let lastname = prenom.trim().toLowerCase();
+    let useremail = email.trim().toLowerCase();
+
+    if(firstname == '' || lastname=='' || useremail == ""){
+      alert('Tous les champs doivent être remplis');
+      setDisabled(false);
+      return;
+    }
+
+    registerPersonnel(firstname+' '+lastname, useremail, password)
+      .then(response => {
+        console.log(response);
+        if (response.token) {
+          global.personnel = response.personnel;
+          global.personnel.token = response.token;
+
+          navigation.replace("Index", { personnel: global.personel });
+
+        } else {
+          setDisabled(false);
+          if(response.errors.email){
+            alert(response.errors.email[0]);
+          }else{
+            alert('Les données renseignées sont incorrectes')
+          }
+        }
       })
-      .catch((error) => alert(error));
+
   };
 
   const onConnexion = () => {
@@ -30,24 +57,18 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const storePersonnel = async (user) => {
-    const personel = {
-      uid: user.uid,
-      pid: 1,
-      nom: nom.trim().toLowerCase(),
-      prenom: prenom.trim().toLowerCase(),
-      email: email.trim().toLowerCase(),
-    };
 
-    firebase
-      .firestore()
-      .collection("personnels")
-      .doc(user.uid)
-      .set(personel)
-      .then((_) => navigation.replace("Index", { personnel: personel }))
-      .catch((error) => {
-        alert(error);
-        alert('store personnel')
-      });
+
+    // firebase
+    //   .firestore()
+    //   .collection("personnels")
+    //   .doc(user.uid)
+    //   .set(personel)
+    //   .then((_) => navigation.replace("Index", { personnel: personel }))
+    //   .catch((error) => {
+    //     alert(error);
+    //     alert('store personnel')
+    //   });
   };
 
   return (
@@ -78,11 +99,14 @@ const RegisterScreen = ({ navigation }) => {
         onChangeText={(e) => setPassword(e)}
         secureTextEntry={true}
       />
-      <TouchableHighlight style={styles.btn} onPress={onSubmit}>
-        <Text style={styles.btnText}>valider</Text>
+      <TouchableHighlight style={styles.btn} onPress={onSubmit}
+        disabled={disabled}
+      >
+        {disabled ? <ActivityIndicator size="large" color="black" /> : <Text style={styles.btnText}>valider</Text>}
       </TouchableHighlight>
       <TouchableHighlight
         style={[styles.btn, { backgroundColor: "red" }]}
+        disabled={disabled}
         onPress={onConnexion}
       >
         <Text style={styles.btnText}>connection</Text>

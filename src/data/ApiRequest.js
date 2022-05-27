@@ -1,3 +1,5 @@
+import '../data/data'
+
 const appurl = "http:///192.168.1.120:8000/api";
 
 
@@ -31,11 +33,9 @@ const sendTokenToServer = async (token) => {
 
     fetch(appurl + "/notification/token/saveOrUpdate", {
         method: 'POST',
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
+        headers: getHeader(),
         body: JSON.stringify({
-            id: 1,
+            id: global.personnel.id,
             token,
         })
     }).then(response => response.json())
@@ -44,45 +44,69 @@ const sendTokenToServer = async (token) => {
 
 const getPersonnelCommands = async () => {
 
-    var res = await fetch(appurl + "/commandes/1")
+    console.log(global.personnel.id);
+    var res = await fetch(appurl + "/commandes/" + (global.personnel.id ?? 1))
         .then(response => response.json())
-
     return res.map(item => formatCommande(item));
 }
 
 const storeCommande = (commandes) => {
     var data = {
-        personnel_id: commandes.personnel.id ?? 1,
+        personnel_id: global.personnel.id,
         table: commandes.table,
         plats: commandes.items
     };
 
-    console.log(data);
-
-    console.log('SEND DARA');
-
-    fetch(appurl+"/commande/save", {
-        method:'POST',
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
+    fetch(appurl + "/commande/save", {
+        method: 'POST',
+        headers: getHeader(),
         body: JSON.stringify(data)
     }).then(response => response.json())
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
 }
 
 const formatCommande = (commande) => ({
     id: commande.commande_id,
-    table:commande.commande.table_client.numero_table,
-    status:commande.commande.etat.libelle,
-    total:commande.quantite*commande.plat.prix,
+    table: commande.commande.table_client.numero_table,
+    status: commande.commande.etat.libelle,
+    total: commande.quantite * commande.plat.prix,
     createdAt: commande.created_at,
 });
 
-const login = (email, password) => ({
+const login = async (email, password) => {
+    console.log(email, password)
+    var result = await fetch(appurl + "/login", {
+        method: 'POST',
+        headers: getHeader(),
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    }).then(response => response.json());
 
-});
+    return result;
+};
 
 
-export { getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande };
+const getHeader = () => ({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${global.personnel.token}`
+})
+
+const registerPersonnel = (name, email, password) => {
+    var result = fetch(appurl + "/user/register", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({name, email, password})
+    }).then(response => response.json());
+
+    return result;
+};
+
+
+export {registerPersonnel, getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande, login };

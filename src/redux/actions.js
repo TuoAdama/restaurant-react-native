@@ -2,7 +2,7 @@ import {
   ADD_TO_CART,
   UPDATE_QUANTITY,
   REMOVE_TO_CART,
-  CLEAR_CART,
+  CLEAR_CART
 } from "./actionTypes";
 
 export const addToCart = (item) => ({

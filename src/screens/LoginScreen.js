@@ -8,8 +8,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-import { firebase } from "../../firebase/config";
 import appColors from "../assets/colors";
+import { login } from '../data/ApiRequest'
+import '../data/data';
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
@@ -18,26 +19,18 @@ export default function LoginScreen({ navigation }) {
 
   const onSubmitHandler = () => {
     setDisableButton(true);
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(username, password)
-      .then((credential) => {
-        firebase
-          .firestore()
-          .collection("personnels")
-          .doc(credential.user.uid)
-          .get()
-          .then((firestoreDoc) => {
-            if (!firestoreDoc.exists) {
-              alert("Personnel n'existe pas");
-              return;
-            }
-            navigation.replace("Index", { personnel: firestoreDoc.data() });
-          });
-      })
-      .catch((error) => {
-        alert(error);
-        setDisableButton(false)
+
+    login(username.trim(), password)
+      .then(response => {
+        console.log(response);
+        if (response.token) {
+          global.personnel = response.personnel;
+          global.personnel.token = response.token;
+          navigation.replace("Index", { personnel: response.personnel });
+        } else {
+          alert("Email ou mot de passe incorrect");
+          setDisableButton(false)
+        }
       });
   };
 

@@ -72,7 +72,4 @@ export const categories = [
   { id: 3, libelle: "sandwich" },
 ];
 
-export const personnel = {}
-
-
-export {personnel};
+global.personnel = null;
