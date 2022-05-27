@@ -5,7 +5,6 @@ import { CategorieComponent, PlatItem, SearchInput, CommandeDialogComponent } fr
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import { FlatList } from "react-native-gesture-handler";
-import { getCategories, getPlats } from "../../firebase/data";
 import { useToast } from 'react-native-toast-notifications';
 import {getAllPlats, getAllCategories, sendTokenToServer} from '../data/ApiRequest'
 
@@ -136,7 +135,6 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
-          <Button title="Demo" onPress={() => console.log(global.personnel) } />
           <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}
