@@ -1,16 +1,15 @@
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import 'intl';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import "intl";
 import "intl/locale-data/jsonp/fr";
 
-const CartItem = (props) => {
+const PanierItem = (props) => {
   return (
     <View style={[styles.container, styles.border]}>
       <View style={styles.cartImage}>
         <Image
-          source={{uri:props.item.images[0]}}
+          source={{ uri: props.item.images[0] }}
           resizeMode="contain"
           style={styles.image}
         />
@@ -20,17 +19,17 @@ const CartItem = (props) => {
         </View>
       </View>
       <View style={[styles.quantite]}>
-        <TouchableHighlight onPress={props.decrementQuantite}>
+        <TouchableOpacity onPress={props.decrementQuantite}>
           <Ionicons name="ios-remove-circle-outline" size={40} color="black" />
-        </TouchableHighlight>
+        </TouchableOpacity>
         <Text>{props.item.quantite}</Text>
-        <TouchableHighlight onPress={props.incrementQuantite}>
+        <TouchableOpacity onPress={props.incrementQuantite}>
           <Ionicons name="ios-add-circle-outline" size={40} color="black" />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
-      <TouchableHighlight onPress={props.onRemove}>
+      <TouchableOpacity onPress={props.onRemove}>
         <FontAwesome5 name="trash" size={24} color="red" />
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -66,10 +65,10 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
   },
-  title:{
-    fontSize:18,
-    fontWeight:'bold'
-  }
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
 
-export default CartItem;
+export default PanierItem;

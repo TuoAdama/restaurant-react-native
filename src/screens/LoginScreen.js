@@ -5,35 +5,31 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  StatusBar,
+  ActivityIndicator,
 } from "react-native";
 
-import { firebase } from "../../firebase/config";
+import appColors from "../assets/colors";
+import { login } from '../data/ApiRequest'
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
   const [password, onChangePassword] = React.useState("tuoadama123456");
+  const [disableButton, setDisableButton] = React.useState(false);
 
   const onSubmitHandler = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(username, password)
-      .then((credential) => {
-        firebase
-          .firestore()
-          .collection("personnels")
-          .doc(credential.user.uid)
-          .get()
-          .then((firestoreDoc) => {
-            if (!firestoreDoc.exists) {
-              alert("Personnel n'existe pas");
-              return;
-            }
-            navigation.replace("Index", { personnel: firestoreDoc.data() });
-          });
-      })
-      .catch((error) => {
-        alert(error);
+    setDisableButton(true);
+
+    login(username.trim(), password)
+      .then(response => {
+        console.log(response);
+        if (response.token) {
+          global.personnel = response.personnel;
+          global.personnel.token = response.token;
+          navigation.replace("Index", { personnel: response.personnel });
+        } else {
+          alert("Email ou mot de passe incorrect");
+          setDisableButton(false)
+        }
       });
   };
 
@@ -61,11 +57,22 @@ export default function LoginScreen({ navigation }) {
           onChangeText={onChangePassword}
           secureTextEntry={true}
         />
-        <TouchableHighlight style={styles.btn} onPress={onSubmitHandler}>
-          <Text style={styles.btnText}>Se connecter</Text>
+        <TouchableHighlight
+          style={[
+            styles.btn,
+            { backgroundColor: disableButton ? "#dddddd" : "#557FF1" },
+          ]}
+          onPress={onSubmitHandler}
+          disabled={disableButton}
+        >
+          {disableButton ? (
+            <ActivityIndicator size="large" color="black" />
+          ) : (
+            <Text style={styles.btnText}>Se connecter</Text>
+          )}
         </TouchableHighlight>
         <TouchableHighlight
-          style={[styles.btn, { backgroundColor: "red" }]}
+          style={[styles.btn, { backgroundColor: appColors.primary }]}
           onPress={onRegisterHandler}
         >
           <Text style={styles.btnText}>S'enregistrer</Text>

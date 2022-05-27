@@ -1,14 +1,25 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import CategorieComponent from "../components/CategorieComponent";
-import PlatItem from "../components/PlatItem";
-import SearchComponent from "../components/SearchComponent";
-import { FlatGrid } from "react-native-super-grid";
+import { StyleSheet, View, StatusBar, Button } from "react-native";
+import { CategorieComponent, PlatItem, SearchInput, CommandeDialogComponent } from '../components';
+
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
-import CommandeDialogComponent from "../components/CommandeDialogComponent";
 import { FlatList } from "react-native-gesture-handler";
-import { getCategories, getPlats } from "../../firebase/data";
+import { useToast } from 'react-native-toast-notifications';
+import {getAllPlats, getAllCategories, sendTokenToServer} from '../data/ApiRequest'
+
+import {getRegisterToken} from '../notifications/nofitications';
+import * as Notifications from 'expo-notifications'
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+  }),
+});
+
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -17,31 +28,35 @@ class HomeScreen extends Component {
       visible: false,
       itemSelected: null,
       plats: [],
-      categories:[],
+      categories: [],
       categorieSelected: null,
     };
 
-    this.allPlats = []
-
+    this.allPlats = [];
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
-    Promise.all([getPlats(), getCategories()]).then(([platsRes, categoriesRes]) => {
-      this.allPlats = platsRes;
-      this.setState({
-        plats: platsRes,
-        categories:categoriesRes,
-        categorieSelected: categoriesRes.find(item => item.id == 0)
-      })
-    });
+
+    getRegisterToken().then(token => sendTokenToServer(token));
+
+    Promise.all([getAllPlats(), getAllCategories()]).then(
+      ([platsRes, categoriesRes]) => {
+        this.allPlats = platsRes;
+        this.setState({
+          plats: platsRes,
+          categories: categoriesRes,
+          categorieSelected: categoriesRes.find((item) => item.id == 0),
+        });
+      }
+    );
   }
 
   onSearch(search) {
     let results = this.getPlatByCurrentCategorie(this.state.categorieSelected);
 
     if (search.trim().length) {
-      results = this.state.plats.filter((item) =>
+      results = this.allPlats.filter((item) =>
         item.libelle.toLowerCase().startsWith(search.trim().toLowerCase())
       );
     }
@@ -70,6 +85,7 @@ class HomeScreen extends Component {
     } else {
       this.props.updateQuantite(selectItem, qte);
     }
+
     this.onClose();
   }
 
@@ -88,6 +104,15 @@ class HomeScreen extends Component {
     });
   }
 
+  onTapPlatItem = (item) => {
+    this.props
+      .route
+      .params
+      .navigationToDetail.navigate("PlatDetail", {
+        item,
+      });
+  };
+
   getPlatByCurrentCategorie(currentCategorie) {
     let results = this.allPlats;
 
@@ -102,6 +127,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar />
         <CommandeDialogComponent
           visible={this.state.visible}
           item={this.state.itemSelected}
@@ -109,7 +135,7 @@ class HomeScreen extends Component {
           onClose={this.onClose.bind(this)}
         />
         <View>
-          <SearchComponent onChangeText={this.onSearch.bind(this)} />
+          <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -124,13 +150,18 @@ class HomeScreen extends Component {
             )}
           />
         </View>
-        <FlatGrid
-          itemDimension={150}
+        <FlatList
+          style={styles.platList}
+          numColumns={2}
           showsVerticalScrollIndicator={false}
           data={this.state.plats}
-          spacing={15}
+          keyExtractor={(item, index) => index}
           renderItem={({ item }) => (
-            <PlatItem item={item} onAdd={() => this.addItem(item)} />
+            <PlatItem
+              item={item}
+              onAdd={() => this.addItem(item)}
+              onTap={this.onTapPlatItem}
+            />
           )}
         />
       </View>
@@ -141,7 +172,7 @@ class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: StatusBar.currentHeight,
     marginHorizontal: 13,
   },
   section: {
@@ -151,7 +182,7 @@ const styles = StyleSheet.create({
   plats: {
     flexDirection: "row",
     flexWrap: "wrap",
-  },
+  }
 });
 
 const mapStateToProps = (state) => ({
