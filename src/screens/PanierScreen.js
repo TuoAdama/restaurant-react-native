@@ -15,7 +15,6 @@ import { addToCommande } from "../redux/actions/commandesAction";
 import "intl";
 import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
-import { getPersonnelByUserId } from "../../firebase/data";
 import { currentDateTime } from "../utils/date";
 import appColors from '../assets/colors'
 import {storeCommande} from '../data/ApiRequest'
@@ -49,10 +48,8 @@ const PanierScreen = (props) => {
 
   const handlerValid = async () => {
     setVisible(false);
-    const personnel = await getPersonnelByUserId();
 
     const commande = {
-      personnel,
       table: tableSelected,
       createdAt: currentDateTime(),
       status: "EN COURS",
@@ -60,7 +57,6 @@ const PanierScreen = (props) => {
       total:getTotal()
     };
     storeCommande(commande)
-    // await storeCommande(commande);
     props.clearCart();
   };
 
