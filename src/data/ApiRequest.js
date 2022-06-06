@@ -1,6 +1,6 @@
 import '../data/data'
 
-const appurl = "http:///192.168.1.120:8000/api";
+const appurl = "http://mon-restaurant.vzn.ovh/api";
 
 
 const getAllPlats = async () => {
