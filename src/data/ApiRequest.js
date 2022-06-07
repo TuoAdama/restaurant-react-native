@@ -1,6 +1,6 @@
 import '../data/data'
 
-const appurl = "http:///192.168.1.120:8000/api";
+const appurl = "http://mon-restaurant.vzn.ovh/api";
 
 
 const getAllPlats = async () => {
@@ -95,9 +95,9 @@ const getHeader = () => {
         'Accept': 'application/json'
     };
 
-    if(global.personnel != null){
-        if(global.personnel.token){
-            header['Authorization'] =  global.personnel.token;
+    if (global.personnel != null) {
+        if (global.personnel.token) {
+            header['Authorization'] = global.personnel.token;
         }
     }
 
@@ -111,11 +111,42 @@ const registerPersonnel = (name, email, password) => {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
-        body: JSON.stringify({name, email, password})
+        body: JSON.stringify({ name, email, password })
     }).then(response => response.json());
 
     return result;
 };
 
 
-export {registerPersonnel, getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande, login };
+const getPlatByCategorieLibelle = async (item) => {
+
+    var response = await fetch(`${appurl}/search/plats/${item.id}/${item.categorie}/5`)
+        .then(response => response.json());
+
+    var plats = response.map(plat => platFormat(plat))
+
+    return plats;
+
+    // const platsCollection = firestore
+    //     .collection("plats")
+    //     .where("categorie", "==", item.categorie)
+    //     .get();
+    // const promise = new Promise((resolve, reject) => {
+    //     platsCollection.then((querySnapshot) => {
+    //         const docs = querySnapshot.docs;
+    //         const size = docs.length;
+
+    //         var plats = []
+
+    //         if (size > 1) {
+    //             plats = docs.map(document => platFormat(document))
+    //         }
+    //         resolve(plats)
+    //     });
+    // })
+
+    // return promise;
+};
+
+
+export { registerPersonnel, getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande, login, getPlatByCategorieLibelle };
