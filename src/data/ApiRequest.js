@@ -127,26 +127,23 @@ const getPlatByCategorieLibelle = async (item) => {
 
     return plats;
 
-    // const platsCollection = firestore
-    //     .collection("plats")
-    //     .where("categorie", "==", item.categorie)
-    //     .get();
-    // const promise = new Promise((resolve, reject) => {
-    //     platsCollection.then((querySnapshot) => {
-    //         const docs = querySnapshot.docs;
-    //         const size = docs.length;
-
-    //         var plats = []
-
-    //         if (size > 1) {
-    //             plats = docs.map(document => platFormat(document))
-    //         }
-    //         resolve(plats)
-    //     });
-    // })
-
-    // return promise;
 };
 
+const getTablesClient = async () => {
+    var tables = await fetch(`${appurl}/tableclient`).then(response => response.json());
+    tables = tables.map(tab => tab.numero_table);
+    return tables;
+}
 
-export { registerPersonnel, getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande, login, getPlatByCategorieLibelle };
+
+export {
+    registerPersonnel,
+    getAllPlats,
+    getAllCategories,
+    sendTokenToServer,
+    getPersonnelCommands,
+    storeCommande, 
+    login, 
+    getPlatByCategorieLibelle,
+    getTablesClient
+};

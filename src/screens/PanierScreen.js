@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -17,12 +17,18 @@ import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
 import { currentDateTime } from "../utils/date";
 import appColors from '../assets/colors'
-import {storeCommande} from '../data/ApiRequest'
+import {storeCommande, getTablesClient} from '../data/ApiRequest'
 
 const PanierScreen = (props) => {
   const [visible, setVisible] = React.useState(false);
-  const tables = ["TAB001", "TAB002", "TAB003", "TAB004"];
+  const [tables, setTables] = React.useState([]);
   const [tableSelected, settableSelected] = React.useState(tables[0]);
+
+  useEffect(() => {
+    getTablesClient().then(res =>  {
+      setTables(res)
+    })
+  },[]);
 
   const onRemove = (i) => {
     props.removeCartItem(i);
