@@ -107,8 +107,9 @@ class CommandesScreen extends React.Component {
             data={this.state.commandeFiltred}
             refreshControl={this.handeRefreshControl()}
             showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index}
             renderItem={({ item }) => (
-              <CommandeItem key={item.id} commande={item} />
+              <CommandeItem commande={item} />
             )}
           />
         </>
