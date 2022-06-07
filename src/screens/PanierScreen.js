@@ -27,6 +27,7 @@ const PanierScreen = (props) => {
   useEffect(() => {
     getTablesClient().then(res =>  {
       setTables(res)
+      settableSelected(tables[0]);
     })
   },[]);
 

@@ -45,7 +45,7 @@ const sendTokenToServer = async (token) => {
 const getPersonnelCommands = async () => {
 
     console.log(global.personnel.id);
-    var res = await fetch(appurl + "/commandes/" + (global.personnel.id ?? 1))
+    var res = await fetch(`${appurl}/commandes/${global.personnel.id}`)
         .then(response => response.json())
     return res.map(item => formatCommande(item));
 }
@@ -66,13 +66,22 @@ const storeCommande = (commandes) => {
         .catch(error => console.log(error));
 }
 
-const formatCommande = (commande) => ({
-    id: commande.commande_id,
-    table: commande.commande.table_client.numero_table,
-    status: commande.commande.etat.libelle,
-    total: commande.quantite * commande.plat.prix,
-    createdAt: commande.created_at,
-});
+const formatCommande = (commande) => {
+
+    var total = 0;
+
+    commande.plat_commandes.forEach(p => {
+        total += p.quantite * p.plat.prix
+    });
+
+    return {
+        id: commande.id,
+        table: commande.table_client.numero_table,
+        status: commande.etat.libelle,
+        total: total,
+        createdAt: commande.created_at,
+    }
+};
 
 const login = async (email, password) => {
     console.log(email, password)
@@ -142,8 +151,8 @@ export {
     getAllCategories,
     sendTokenToServer,
     getPersonnelCommands,
-    storeCommande, 
-    login, 
+    storeCommande,
+    login,
     getPlatByCategorieLibelle,
     getTablesClient
 };
