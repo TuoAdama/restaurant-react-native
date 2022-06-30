@@ -6,8 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Button,
-  Picker,
 } from "react-native";
+import {Picker} from '@react-native-picker/picker';
 import PanierItem from "../components/PanierItem";
 import { connect } from "react-redux";
 import { removeCartItem, updateQuantite, clearCart } from "../redux/actions";

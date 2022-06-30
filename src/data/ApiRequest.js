@@ -51,6 +51,7 @@ const getPersonnelCommands = async () => {
 }
 
 const storeCommande = (commandes) => {
+    console.log(commandes);
     var data = {
         personnel_id: global.personnel.id,
         table: commandes.table,
