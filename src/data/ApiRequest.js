@@ -1,6 +1,7 @@
 import '../data/data'
 
-const appurl = "http://mon-restaurant.vzn.ovh/api";
+// const appurl = "http://mon-restaurant.vzn.ovh/api";
+const appurl = "http://192.168.1.120:8000/api";
 
 
 const getAllPlats = async () => {
@@ -145,6 +146,12 @@ const getTablesClient = async () => {
     return tables;
 }
 
+const getCommandeItems = async (id) => {
+    var items = await fetch(appurl+"/items/commandes/"+id)
+                      .then(response => response.json());
+    return items;
+}
+
 
 export {
     registerPersonnel,
@@ -155,5 +162,6 @@ export {
     storeCommande,
     login,
     getPlatByCategorieLibelle,
-    getTablesClient
+    getTablesClient,
+    getCommandeItems
 };
