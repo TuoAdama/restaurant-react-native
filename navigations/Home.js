@@ -7,8 +7,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import PanierScreen from "../src/screens/PanierScreen";
 import appColors from "../src/assets/colors";
+import ProfilScreen from "../src/screens/ProfilScreen";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const Tab = createBottomTabNavigator();
 
   return (
@@ -21,7 +22,7 @@ const Home = ({navigation}) => {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        initialParams={{navigationToDetail:navigation}}
+        initialParams={{ navigationToDetail: navigation }}
         options={{
           headerShown: false,
           tabBarLabel: "Home",
@@ -54,6 +55,19 @@ const Home = ({navigation}) => {
           tabBarLabel: "Panier",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="fastfood" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Profil"
+        component={ProfilScreen}
+        initialParams={{ navigationToLogin: navigation }}
+        options={{
+          headerShown:false,
+          tabBarLabel: "Profil",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="person" size={size} color={color} />
           ),
         }}
       />
