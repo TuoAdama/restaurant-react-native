@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import RegisterScreen from './src/screens/RegisterScreen';
 import PlatDetailScreen from './src/screens/PlatDetailScreen';
 import { ToastProvider } from 'react-native-toast-notifications';
+import DetailCommandeScreen from './src/screens/DetailCommandeScreen';
 ;
 
 
@@ -25,6 +26,7 @@ export default function App() {
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="PlatDetail" component={PlatDetailScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Index" component={Home} options={{ headerShown: false, }} />
+            <Stack.Screen name="DetailCommandeScreen" component={DetailCommandeScreen} options={{title:"Liste des éléments"}}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

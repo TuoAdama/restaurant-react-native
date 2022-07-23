@@ -35,6 +35,7 @@ const Home = ({ navigation }) => {
       <Tab.Screen
         name="Commandes"
         component={CommandesScreen}
+        initialParams={{ navigation }}
         options={{
           headerShown: false,
           tabBarLabel: "Commandes",

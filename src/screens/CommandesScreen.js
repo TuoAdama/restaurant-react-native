@@ -70,9 +70,18 @@ class CommandesScreen extends React.Component {
     );
   };
 
-  handleDetail(id){
-    getCommandeItems(id).then(items => {
-      console.log(items);
+  handleDetail(item){
+    getCommandeItems(item.id).then(response => {
+      console.log(response);
+      this.props
+      .route
+      .params
+      .navigation
+      .navigate('DetailCommandeScreen', {
+        items: response,
+        table:item.table,
+        status: item.status
+      });
     });
   }
 
@@ -116,7 +125,7 @@ class CommandesScreen extends React.Component {
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => (
-              <CommandeItem commande={item} showDetail={() => this.handleDetail(item.id)}/>
+              <CommandeItem commande={item} showDetail={() => this.handleDetail(item)}/>
             )}
           />
         </>
