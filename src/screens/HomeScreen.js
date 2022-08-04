@@ -92,7 +92,7 @@ class HomeScreen extends Component {
       this.props.updateQuantite(selectItem, qte);
     }
 
-    this.onClose();
+    this.bottomSheetModalRef.current?.close();
   }
 
   onClose() {
@@ -171,7 +171,7 @@ class HomeScreen extends Component {
           )}
         />
         <BottomModal bottomSheetModalRef={this.bottomSheetModalRef}>
-          <PlatModalElement plat={this.state.itemSelected} bottomSheetModalRef={this.bottomSheetModalRef}/>
+          <PlatModalElement plat={this.state.itemSelected} onSubmit={this.onSubmit}/>
         </BottomModal>
       </View>
     );
