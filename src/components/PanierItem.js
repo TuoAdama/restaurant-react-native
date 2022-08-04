@@ -3,6 +3,7 @@ import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import "intl";
 import "intl/locale-data/jsonp/fr";
+import {capitalize, formPrix} from '../utils/StringHelper'
 
 const PanierItem = (props) => {
   return (
@@ -13,9 +14,9 @@ const PanierItem = (props) => {
           resizeMode="contain"
           style={styles.image}
         />
-        <View>
-          <Text style={styles.title}>{props.item.libelle}</Text>
-          <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
+        <View style={{marginLeft:5}}>
+          <Text style={styles.title}>{capitalize(props.item.libelle)}</Text>
+          <Text>{formPrix(props.item.prix)} FCFA</Text>
         </View>
       </View>
       <View style={[styles.quantite]}>

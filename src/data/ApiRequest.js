@@ -2,7 +2,6 @@ import '../data/data'
 
 const appurl = "http://mon-restaurant.vzn.ovh/api";
 
-
 const getAllPlats = async () => {
     let url = appurl + "/plats";
     var data = await fetch(url).then(response => {
@@ -45,12 +44,13 @@ const sendTokenToServer = async (token) => {
 const getPersonnelCommands = async () => {
 
     console.log(global.personnel.id);
-    var res = await fetch(appurl + "/commandes/" + (global.personnel.id ?? 1))
+    var res = await fetch(`${appurl}/commandes/${global.personnel.id}`)
         .then(response => response.json())
     return res.map(item => formatCommande(item));
 }
 
 const storeCommande = (commandes) => {
+    console.log(commandes);
     var data = {
         personnel_id: global.personnel.id,
         table: commandes.table,
@@ -66,13 +66,22 @@ const storeCommande = (commandes) => {
         .catch(error => console.log(error));
 }
 
-const formatCommande = (commande) => ({
-    id: commande.commande_id,
-    table: commande.commande.table_client.numero_table,
-    status: commande.commande.etat.libelle,
-    total: commande.quantite * commande.plat.prix,
-    createdAt: commande.created_at,
-});
+const formatCommande = (commande) => {
+
+    var total = 0;
+
+    commande.plat_commandes.forEach(p => {
+        total += p.quantite * p.plat.prix
+    });
+
+    return {
+        id: commande.id,
+        table: commande.table_client.numero_table,
+        status: commande.etat.libelle,
+        total: total,
+        createdAt: commande.created_at,
+    }
+};
 
 const login = async (email, password) => {
     console.log(email, password)
@@ -95,9 +104,9 @@ const getHeader = () => {
         'Accept': 'application/json'
     };
 
-    if(global.personnel != null){
-        if(global.personnel.token){
-            header['Authorization'] =  global.personnel.token;
+    if (global.personnel != null) {
+        if (global.personnel.token) {
+            header['Authorization'] = global.personnel.token;
         }
     }
 
@@ -111,11 +120,46 @@ const registerPersonnel = (name, email, password) => {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
-        body: JSON.stringify({name, email, password})
+        body: JSON.stringify({ name, email, password })
     }).then(response => response.json());
 
     return result;
 };
 
 
-export {registerPersonnel, getAllPlats, getAllCategories, sendTokenToServer, getPersonnelCommands, storeCommande, login };
+const getPlatByCategorieLibelle = async (item) => {
+
+    var response = await fetch(`${appurl}/search/plats/${item.id}/${item.categorie}/5`)
+        .then(response => response.json());
+
+    var plats = response.map(plat => platFormat(plat))
+
+    return plats;
+
+};
+
+const getTablesClient = async () => {
+    var tables = await fetch(`${appurl}/tableclient`).then(response => response.json());
+    tables = tables.map(tab => tab.numero_table);
+    return tables;
+}
+
+const getCommandeItems = async (id) => {
+    var items = await fetch(appurl+"/items/commandes/"+id)
+                      .then(response => response.json());
+    return items;
+}
+
+
+export {
+    registerPersonnel,
+    getAllPlats,
+    getAllCategories,
+    sendTokenToServer,
+    getPersonnelCommands,
+    storeCommande,
+    login,
+    getPlatByCategorieLibelle,
+    getTablesClient,
+    getCommandeItems
+};

@@ -14,6 +14,7 @@ import { BackButton, QuantiteButton } from '../components';
 import { addToCart, updateQuantite } from "../redux/actions";
 import { connect } from "react-redux";
 import { useToast } from 'react-native-toast-notifications';
+import {getPlatByCategorieLibelle} from '../data/ApiRequest'
 
 
 const { width } = Dimensions.get('window')

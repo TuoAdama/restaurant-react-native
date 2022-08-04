@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -6,8 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Button,
-  Picker,
 } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import PanierItem from "../components/PanierItem";
 import { connect } from "react-redux";
 import { removeCartItem, updateQuantite, clearCart } from "../redux/actions";
@@ -17,12 +17,19 @@ import "intl/locale-data/jsonp/fr";
 import Dialog from "react-native-dialog";
 import { currentDateTime } from "../utils/date";
 import appColors from '../assets/colors'
-import {storeCommande} from '../data/ApiRequest'
+import { storeCommande, getTablesClient } from '../data/ApiRequest'
 
 const PanierScreen = (props) => {
   const [visible, setVisible] = React.useState(false);
-  const tables = ["TAB001", "TAB002", "TAB003", "TAB004"];
+  const [tables, setTables] = React.useState([]);
   const [tableSelected, settableSelected] = React.useState(tables[0]);
+
+  useEffect(() => {
+    getTablesClient().then(res => {
+      setTables(res)
+      settableSelected(tables[0]);
+    })
+  }, []);
 
   const onRemove = (i) => {
     props.removeCartItem(i);
@@ -47,17 +54,19 @@ const PanierScreen = (props) => {
   };
 
   const handlerValid = async () => {
-    setVisible(false);
+    if (tableSelected) {
+      setVisible(false);
 
-    const commande = {
-      table: tableSelected,
-      createdAt: currentDateTime(),
-      status: "EN COURS",
-      items: props.panier,
-      total:getTotal()
-    };
-    storeCommande(commande)
-    props.clearCart();
+      const commande = {
+        table: tableSelected,
+        createdAt: currentDateTime(),
+        status: "EN COURS",
+        items: props.panier,
+        total: getTotal()
+      };
+      storeCommande(commande)
+      props.clearCart();
+    }
   };
 
   const showPanier = () => {
@@ -72,6 +81,7 @@ const PanierScreen = (props) => {
               settableSelected(itemValue)
             }
           >
+            <Picker.Item label={"Choisir une table"} value={0} enabled={false} />
             {tables.map((tab, id) => (
               <Picker.Item key={id} label={tab} value={tab} />
             ))}

@@ -12,7 +12,7 @@ import CommandeItem from "../components/CommandeItem";
 import SearchInput from "../components/SearchInput";
 import appColors from "../assets/colors";
 import { ScrollView } from "react-native-gesture-handler";
-import {getPersonnelCommands} from '../data/ApiRequest'
+import {getPersonnelCommands, getCommandeItems} from '../data/ApiRequest'
 
 class CommandesScreen extends React.Component {
   constructor(props) {
@@ -70,6 +70,21 @@ class CommandesScreen extends React.Component {
     );
   };
 
+  handleDetail(item){
+    getCommandeItems(item.id).then(response => {
+      console.log(response);
+      this.props
+      .route
+      .params
+      .navigation
+      .navigate('DetailCommandeScreen', {
+        items: response,
+        table:item.table,
+        status: item.status
+      });
+    });
+  }
+
   handleEmptyOrder() {
     return (
       <ScrollView
@@ -89,6 +104,7 @@ class CommandesScreen extends React.Component {
       commandeFiltred: results,
     });
   };
+  
 
   render() {
     return this.state.showLoading ? (
@@ -107,8 +123,9 @@ class CommandesScreen extends React.Component {
             data={this.state.commandeFiltred}
             refreshControl={this.handeRefreshControl()}
             showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index}
             renderItem={({ item }) => (
-              <CommandeItem key={item.id} commande={item} />
+              <CommandeItem commande={item} showDetail={() => this.handleDetail(item)}/>
             )}
           />
         </>

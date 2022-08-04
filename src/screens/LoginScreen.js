@@ -12,8 +12,10 @@ import appColors from "../assets/colors";
 import { login } from '../data/ApiRequest'
 
 export default function LoginScreen({ navigation }) {
-  const [username, onChangeUsername] = React.useState("tuoadama17@gmail.com");
-  const [password, onChangePassword] = React.useState("tuoadama123456");
+  // const [username, onChangeUsername] = React.useState("tuoadama@gmail.com");
+  // const [password, onChangePassword] = React.useState("tuoadama");
+  const [username, onChangeUsername] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
   const [disableButton, setDisableButton] = React.useState(false);
 
   const onSubmitHandler = () => {

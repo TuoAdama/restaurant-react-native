@@ -1,7 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { color } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 
 const CommandeItem = (props) => {
   const getHour = () => {
@@ -30,7 +28,7 @@ const CommandeItem = (props) => {
         </Text>
         <Text style={styles.textStyle}>{getHour()}</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={props.showDetail}>
         <Text style={styles.text_btn}>Details</Text>
       </TouchableOpacity>
     </View>
