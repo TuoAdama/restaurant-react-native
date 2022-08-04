@@ -71,10 +71,8 @@ class HomeScreen extends Component {
   }
 
   addItem(item) {
-    console.log(item);
     this.setState({
       itemSelected: item,
-      // visible: true,
     });
     this.bottomSheetModalRef.current?.present();
   }
@@ -134,12 +132,6 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <StatusBar />
-        <CommandeDialogComponent
-          visible={this.state.visible}
-          item={this.state.itemSelected}
-          onSubmit={this.onSubmit}
-          onClose={this.onClose.bind(this)}
-        />
         <View>
           <SearchInput onChangeText={this.onSearch.bind(this)} />
           <FlatList
@@ -171,7 +163,7 @@ class HomeScreen extends Component {
           )}
         />
         <BottomModal bottomSheetModalRef={this.bottomSheetModalRef}>
-          <PlatModalElement plat={this.state.itemSelected} onSubmit={this.onSubmit}/>
+          <PlatModalElement plat={this.state.itemSelected} onSubmit={this.onSubmit} />
         </BottomModal>
       </View>
     );
