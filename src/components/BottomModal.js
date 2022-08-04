@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 const BottomModal = ({ bottomSheetModalRef, children }) => {
-    const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
+    const snapPoints = useMemo(() => ["50%"], []);
 
     const renderBackdrop = useCallback(
         props => (
@@ -20,7 +20,7 @@ const BottomModal = ({ bottomSheetModalRef, children }) => {
     return (
         <BottomSheetModal
             ref={bottomSheetModalRef}
-            index={1}
+            index={0}
             snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
         >
