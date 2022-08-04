@@ -13,7 +13,7 @@ import { styles as monStyle } from "../assets/styles";
 
 import "intl";
 import "intl/locale-data/jsonp/fr";
-import { capitalize } from '../utils/StringHelper'
+import { capitalize, formPrix } from '../utils/StringHelper'
 
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -36,7 +36,7 @@ const PlatItem = (props) => {
         <Text style={styles.title}>{capitalize(props.item.libelle)}</Text>
       </View>
       <View style={styles.description}>
-        <Text>{new Intl.NumberFormat().format(props.item.prix)} FCFA</Text>
+        <Text>{formPrix(props.item.prix)} FCFA</Text>
         <TouchableHighlight onPress={props.onAdd}>
           <MaterialIcons name="add-box" size={28} color="black" />
         </TouchableHighlight>

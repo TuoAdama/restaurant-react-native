@@ -1,22 +1,25 @@
 import React, { Component } from "react";
-import { StyleSheet, View, StatusBar, Button } from "react-native";
+import { StyleSheet, View, StatusBar, Text, Image, TouchableHighlight } from "react-native";
 import { CategorieComponent, PlatItem, SearchInput, CommandeDialogComponent } from '../components';
 
 import { connect } from "react-redux";
 import { addToCart, updateQuantite } from "../redux/actions";
 import { FlatList } from "react-native-gesture-handler";
-import { useToast } from 'react-native-toast-notifications';
-import {getAllPlats, getAllCategories, sendTokenToServer} from '../data/ApiRequest'
+import { getAllPlats, getAllCategories, sendTokenToServer } from '../data/ApiRequest'
 
-import {getRegisterToken} from '../notifications/nofitications';
+import { getRegisterToken } from '../notifications/nofitications';
 import * as Notifications from 'expo-notifications'
+import BottomModal from "../components/BottomModal";
+import { capitalize } from "../utils/StringHelper";
+import { MaterialIcons } from "@expo/vector-icons";
+import PlatModalElement from "../components/PlatModalElement";
 
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
 });
 
@@ -34,6 +37,7 @@ class HomeScreen extends Component {
 
     this.allPlats = [];
     this.onSubmit = this.onSubmit.bind(this);
+    this.bottomSheetModalRef = React.createRef(null);
   }
 
   componentWillMount() {
@@ -67,10 +71,12 @@ class HomeScreen extends Component {
   }
 
   addItem(item) {
+    console.log(item);
     this.setState({
       itemSelected: item,
-      visible: true,
+      // visible: true,
     });
+    this.bottomSheetModalRef.current?.present();
   }
 
   onSubmit(qte) {
@@ -164,6 +170,9 @@ class HomeScreen extends Component {
             />
           )}
         />
+        <BottomModal bottomSheetModalRef={this.bottomSheetModalRef}>
+          <PlatModalElement plat={this.state.itemSelected} bottomSheetModalRef={this.bottomSheetModalRef}/>
+        </BottomModal>
       </View>
     );
   }

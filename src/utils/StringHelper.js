@@ -4,7 +4,12 @@ function capitalize(value) {
     return firstLetter+val.slice(1)
 }
 
+function formPrix(prix) {
+    return new Intl.NumberFormat().format(prix);
+}
+
 
 export {
-    capitalize
+    capitalize,
+    formPrix
 }
